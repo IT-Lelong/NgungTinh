@@ -36,7 +36,7 @@ public class KT_Main extends AppCompatActivity {
                     case R.id.btnok: {
 
                         Intent QR020 = new Intent();
-                        QR020.setClass(KT_Main.this, Detail.class);
+                        QR020.setClass(KT_Main.this, MainActivity2.class);
                         Bundle bundle = new Bundle();
                         //bundle.putString("somay", g_soxe);
                         //bundle.putString("bophan", g_bophan);
