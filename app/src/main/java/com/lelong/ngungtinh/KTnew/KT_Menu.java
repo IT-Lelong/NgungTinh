@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.lelong.ngungtinh.Create_Table;
 import com.lelong.ngungtinh.R;
 
 public class KT_Menu extends AppCompatActivity {
@@ -25,6 +26,9 @@ public class KT_Menu extends AppCompatActivity {
         btn_search.setOnClickListener(btnlistener);
         btn_time.setOnClickListener(btnlistener);
 
+        Create_Table create_table = new Create_Table(this);
+        create_table.open();
+        create_table.createTable();
 
     }
     private ImageButton.OnClickListener btnlistener = new ImageButton.OnClickListener() {

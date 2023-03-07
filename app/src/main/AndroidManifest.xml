@@ -48,10 +48,12 @@
             android:screenOrientation="landscape"/>
         <activity
             android:name=".KTnew.KT_Main"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".KTnew.KT_Menu"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

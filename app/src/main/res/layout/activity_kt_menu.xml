@@ -35,7 +35,7 @@
             android:layout_height="0dp"
 
             android:layout_weight="2"
-            android:text="Vị trí"
+            android:text="電池存放位置"
             android:textSize="20sp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -70,7 +70,7 @@
             android:layout_height="0dp"
 
             android:layout_weight="2"
-            android:text="Tìm kiếm"
+            android:text="資料厙搜孬"
             android:textSize="20sp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -103,9 +103,8 @@
             android:id="@+id/txttime"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-
             android:layout_weight="2"
-            android:text="Thời gian"
+            android:text="超過期限還在靜置區"
             android:textSize="20sp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"

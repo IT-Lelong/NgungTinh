@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,10 +17,9 @@ import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -29,7 +29,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Locale;
 
 public class OpenScaner extends AppCompatActivity {
@@ -42,46 +46,163 @@ public class OpenScaner extends AppCompatActivity {
     JSONObject ujobject;
     Locale locale;
 
-    TextView tv_qrcode;
-    Button btn_addQrcode,btn_DelQrcode;
-    String IDButton;
+    Create_Table create_table = null;
+
+    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_soluong, tv_qc;
+    Button btn_addQrcode, btn_DelQrcode;
+    String IDButton, g_xuong, g_server, SaveCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setLanguage();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_open_scaner);
+        setContentView(R.layout.activity_open_scanner);
         addControlEvent();
 
         Bundle getBundle = getIntent().getExtras();
         IDButton = getBundle.getString("IDButton");
-        //prog = getBundle.getString("prog");
-        //g_server = getBundle.getString("SERVER");
+        g_xuong = getBundle.getString("Xuong");
+        g_server = getBundle.getString("SERVER");
+        g_server = "PHPtest";
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        actionBar.setTitle("棟別: " + g_xuong + "位置: " + IDButton);
 
         CameraSetting();
         firstDetected = true;
+
+        create_table = new Create_Table(this);
+        create_table.open();
+
+        loadData();
 
     }
 
     private void addControlEvent() {
         tv_qrcode = findViewById(R.id.tv_qrcode);
+        tv_ngayvao = findViewById(R.id.tv_ngayvao);
+        tv_ngaysac = findViewById(R.id.tv_ngaysac);
+        tv_tuan = findViewById(R.id.tv_tuan);
+        tv_soluong = findViewById(R.id.tv_soluong);
+        tv_qc = findViewById(R.id.tv_qc);
         btn_addQrcode = findViewById(R.id.btn_addQrcode);
         btn_DelQrcode = findViewById(R.id.btn_DelQrcode);
 
         btn_addQrcode.setOnClickListener(v -> {
-            String g_qrcode = tv_qrcode.getText().toString().trim();
+            String res = "";
+            if (!SaveCode.equals("")) {
+                if (tv_qrcode.getText().toString().length() > 0) {
+                    res = create_table.insScanData(
+                            tv_qrcode.getText().toString().trim(),
+                            tv_qc.getText().toString().trim(),
+                            tv_soluong.getText().toString().trim(),
+                            tv_tuan.getText().toString().trim(),
+                            tv_ngaysac.getText().toString().trim(),
+                            tv_ngayvao.getText().toString().trim(),
+                            SaveCode, IDButton, g_xuong);
 
+                    if (res.equals("TRUE")) {
+                        Toast.makeText(this, "完成存放", Toast.LENGTH_SHORT).show();
+                        firstDetected = true;
+                    } else {
+                        Toast.makeText(this, "存放失敗", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         });
 
         btn_DelQrcode.setOnClickListener(v -> {
+            create_table.delData(g_xuong, IDButton);
+            SaveCode = "";
             tv_qrcode.setText("");
+            tv_ngayvao.setText("");
+            tv_ngaysac.setText("");
+            tv_tuan.setText("");
+            tv_soluong.setText("");
+            tv_qc.setText("");
             firstDetected = true;
         });
     }
 
+    private void loadData() {
+        Cursor cursor = create_table.getall(g_xuong, IDButton);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            int num = cursor.getCount();
+            for (int i = 0; i < num; i++) {
+                @SuppressLint("Range") String scan01 = cursor.getString(cursor.getColumnIndex("scan01"));
+                @SuppressLint("Range") String scan02 = cursor.getString(cursor.getColumnIndex("scan02"));
+                @SuppressLint("Range") String scan03 = cursor.getString(cursor.getColumnIndex("scan03"));
+                @SuppressLint("Range") String scan04 = cursor.getString(cursor.getColumnIndex("scan04"));
+                @SuppressLint("Range") String scan05 = cursor.getString(cursor.getColumnIndex("scan05"));
+                @SuppressLint("Range") String scan06 = cursor.getString(cursor.getColumnIndex("scan06"));
+                @SuppressLint("Range") String scanqrcode = cursor.getString(cursor.getColumnIndex("scanqrcode"));
+                tv_qrcode.setText(scan01);
+                tv_qc.setText(scan02);
+                tv_soluong.setText(scan03);
+                tv_tuan.setText(scan04);
+                tv_ngaysac.setText(scan05);
+                tv_ngayvao.setText(scan06);
+                SaveCode = scanqrcode;
+            }
+        } else {
+            SaveCode = "";
+            tv_qrcode.setText("");
+            tv_ngayvao.setText("");
+            tv_ngaysac.setText("");
+            tv_tuan.setText("");
+            tv_soluong.setText("");
+            tv_qc.setText("");
+        }
+    }
+
+    private void getcode(String g_code) {
+        if (g_code.length() > 0) {
+            String g_doncong = g_code.substring(0, 16).trim();
+            final String res = getcodedata("http://172.16.40.20/" + g_server + "/TechAPP/getDataPallet.php?item=" + g_doncong);
+            if (res.length() > 0 && !res.equals("FALSE")) {
+                tv_qrcode.setText(g_doncong);
+                tv_qc.setText("WTZ5S(COS)");
+                tv_soluong.setText("15,000");
+                tv_tuan.setText("2023010");
+                tv_ngaysac.setText("2023/03/10");
+                tv_ngayvao.setText("2023/03/10");
+                SaveCode = g_code;
+            } else {
+                tv_qrcode.setText(g_code.substring(0, 16));
+                tv_qc.setText("WTZ5S(COS)");
+                tv_soluong.setText("15,000");
+                tv_tuan.setText("2023010");
+                tv_ngaysac.setText("2023/03/10");
+                tv_ngayvao.setText("2023/03/10");
+                SaveCode = g_code;
+            }
+        }
+    }
+
+    private String getcodedata(String s) {
+        try {
+            HttpURLConnection conn = null;
+            URL url = new URL(s);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(999999);
+            conn.setReadTimeout(999999);
+            conn.setDoInput(true); //允許輸入流，即允許下載
+            conn.setDoOutput(true); //允許輸出流，即允許上傳
+            conn.connect();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String jsonstring = reader.readLine();
+            reader.close();
+            if (!jsonstring.equals("FALSE")) {
+                return jsonstring;
+            } else {
+                return "FALSE";
+            }
+        } catch (Exception e) {
+            return "FALSE";
+        }
+    }
 
     private void CameraSetting() {
         surfaceView = (SurfaceView) this.findViewById(R.id.sfv_scanner);
@@ -127,7 +248,7 @@ public class OpenScaner extends AppCompatActivity {
                 if (qrCodes.size() != 0 && firstDetected) {
                     firstDetected = false;
                     final String g_code = qrCodes.valueAt(0).displayValue;
-                    tv_qrcode.setText(g_code.substring(0,16));
+                    getcode(g_code);
                 }
             }
         });
@@ -179,5 +300,11 @@ public class OpenScaner extends AppCompatActivity {
                 break;
         }
         resources.updateConfiguration(configuration, displayMetrics);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        firstDetected = false;
     }
 }
