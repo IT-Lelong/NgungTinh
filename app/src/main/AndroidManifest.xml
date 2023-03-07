@@ -31,7 +31,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NgungTinh"
         tools:targetApi="31">
-
+        <activity
+            android:name=".KTnew.Detail"
+            android:exported="false" />
+        <activity
+            android:name=".KTnew.KT_Main"
+            android:exported="false" />
+        <activity
+            android:name=".KTnew.KT_Menu"
+            android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

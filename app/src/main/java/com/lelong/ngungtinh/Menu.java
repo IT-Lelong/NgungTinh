@@ -1,6 +1,7 @@
 package com.lelong.ngungtinh;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.lelong.ngungtinh.KTnew.KT_Menu;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -107,18 +110,17 @@ public class Menu extends AppCompatActivity {
             //利用switch case方法，之後新增按鈕只需新增case即可
             switch (v.getId()) {
 
-                /*case R.id.btn_KT01: {
+                case R.id.btn_KT01: {
                     Intent QR010 = new Intent();
-                    QR010.setClass(Menu.this, KT02_activity.class);
+                    QR010.setClass(Menu.this, KT_Menu.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", ID);
                     bundle.putString("SERVER", g_server);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
-                    break;
                 }
 
-                case R.id.btn_KT02: {
+                /*case R.id.btn_KT02: {
                     Intent QR010 = new Intent();
                     QR010.setClass(Menu.this, KT02_activity.class);
                     Bundle bundle = new Bundle();

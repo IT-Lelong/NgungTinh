@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".KTnew.KT_Main">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Xưởng"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <Spinner
+        android:id="@+id/cbxxuong"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        />
+
+    <Button
+        android:id="@+id/btnok"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:background="@drawable/qr210_button_custom"
+        android:textColor="@color/white"
+        android:text="@string/btn_ok"
+        android:textSize="15sp"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
