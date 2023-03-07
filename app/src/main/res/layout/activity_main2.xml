@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:weightSum="1"
     tools:context=".KTnew.Detail">
-
-
+    
     <TableLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:shrinkColumns="*"
         android:stretchColumns="*">
@@ -69,8 +69,6 @@
         <TableRow>
 
             <TextView
-
-
                 style="@style/title"
                 android:gravity="center"
                 android:text="1"
@@ -78,8 +76,6 @@
                 android:textStyle="bold" />
 
             <TextView
-
-
                 style="@style/title"
                 android:gravity="center"
                 android:text="2"
@@ -508,15 +504,205 @@
                 android:textStyle="bold" />
 
             <TextView
-
-
                 style="@style/title"
                 android:gravity="center"
                 android:text="10"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <TextView
 
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="9"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/title"
+                android:gravity="center"
+                android:text="10"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+
+
+                style="@style/title"
+                android:gravity="center"
+                android:text="11"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/title"
+                android:gravity="center"
+                android:text="12"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </TableRow>
 
 
