@@ -28,6 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lelong.ngungtinh.KTnew.KT_Menu;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -126,6 +128,12 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+
+        // Check for camera permission
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request for it
+            ActivityCompat.requestPermissions(activity, new String[] { Manifest.permission.CAMERA }, 1);
+        }
     }
 
     private static final int REQUEST_WRITE_PERMISSION = 786;
@@ -167,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 //離線登入
                 if (ID.length() > 0) {
                     Intent login = new Intent();
-                    login.setClass(MainActivity.this, Menu.class);
+                    login.setClass(MainActivity.this, KT_Menu.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", editID.getText().toString());
                     bundle.putString("SERVER", g_server);
@@ -219,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         Intent login = new Intent();
-                        login.setClass(MainActivity.this, Menu.class);
+                        login.setClass(MainActivity.this, KT_Menu.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("ID", editID.getText().toString());
                         bundle.putString("SERVER", g_server);

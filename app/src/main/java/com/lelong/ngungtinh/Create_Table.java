@@ -12,11 +12,12 @@ public class Create_Table {
     String DATABASE_NAME = "NgungTinhDB.db";
     public SQLiteDatabase db = null;
 
-    String TABLE_NAME_TC_FAB = "tc_fab_file";
-    String tc_fab001 = "tc_fab001"; //Mã hạng mục
-    String tc_fab002 = "tc_fab002"; //Mã báo biểu
-    String tc_fab003 = "tc_fab003"; //Mã hạng mục chi tiết
-    String tc_fab004 = "tc_fab004"; //Mã tổng
+    String TB_dulieucoban_file = "dulieucoban_file";
+    String dulieu01 = "dulieu01"; //Mã Xưởng
+    String dulieu02 = "dulieu02"; //Mã Khu
+    String dulieu03 = "dulieu03"; //Mã Vị trí
+    String dulieu04 = "dulieu04"; //Tổng sức chứa
+    String dulieu05 = "dulieu05"; //Đã sử dụng
 
     String TABLE_NAME_TC_FAC = "tc_fac_file";
     String tc_fac001 = "tc_fac001"; //Mã hạng mục
@@ -30,9 +31,9 @@ public class Create_Table {
     String tc_fac011 = "tc_fac011"; //Dãy đo thiết bị
 
 
-    String CREATE_TABLE_FAB = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_TC_FAB + " ("
-            + tc_fab001 + " TEXT," + tc_fab002 + " TEXT,"
-            + tc_fab003 + " TEXT," + tc_fab004 + " TEXT)";
+    String CREATE_TB_dulieucoban_file  = "CREATE TABLE IF NOT EXISTS " + TB_dulieucoban_file + " ("
+            + dulieu01 + " TEXT," + dulieu02 + " TEXT," + dulieu03 + " TEXT,"
+            + dulieu04 + " DECIMAL," + dulieu05 + " DECIMAL)";
 
     String CREATE_TABLE_FAC = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_TC_FAC + " ("
             + tc_fac001 + " TEXT," + tc_fac002 + " TEXT," + tc_fac003 + " TEXT,"
@@ -46,9 +47,11 @@ public class Create_Table {
 
     public void open() throws SQLException {
         db = mCtx.openOrCreateDatabase(DATABASE_NAME, 0, null);
+    }
+
+    public void createTable() {
         try {
-            db.execSQL(CREATE_TABLE_FAB);
-            db.execSQL(CREATE_TABLE_FAC);
+            db.execSQL(CREATE_TB_dulieucoban_file);
         } catch (Exception e) {
 
         }
@@ -56,71 +59,33 @@ public class Create_Table {
 
     public void close() {
         try {
-            String DROP_TABLE_TC_FAB = "DROP TABLE IF EXISTS " + TABLE_NAME_TC_FAB;
-            String DROP_TABLE_TC_FAC = "DROP TABLE IF EXISTS " + TABLE_NAME_TC_FAC;
+            String DROP_TABLE_TC_FAB = "DROP TABLE IF EXISTS " + TB_dulieucoban_file;
             db.execSQL(DROP_TABLE_TC_FAB);
-            db.execSQL(DROP_TABLE_TC_FAC);
             db.close();
         } catch (Exception e) {
 
         }
     }
 
-    public String append(String g_tc_fab001, String g_tc_fab002, String g_tc_fab003, String g_tc_fab004) {
+    public String append(String g_dulieu01, String g_dulieu02, String g_dulieu03, int g_dulieu04, int g_dulieu05) {
         try {
             ContentValues args = new ContentValues();
-            args.put(tc_fab001, g_tc_fab001);
-            args.put(tc_fab002, g_tc_fab002);
-            args.put(tc_fab003, g_tc_fab003);
-            args.put(tc_fab004, g_tc_fab004);
-            db.insert(TABLE_NAME_TC_FAB, null, args);
+            args.put(dulieu01, g_dulieu01);
+            args.put(dulieu02, g_dulieu02);
+            args.put(dulieu03, g_dulieu03);
+            args.put(dulieu04, g_dulieu04);
+            args.put(dulieu05, g_dulieu05);
+            db.insert(TB_dulieucoban_file, null, args);
             return "TRUE";
         } catch (Exception e) {
             return "FALSE";
         }
     }
 
-    public String append(String g_tc_fac001, String g_tc_fac002, String g_tc_fac003,
-                       String g_tc_fac004, String g_tc_fac005, String g_tc_fac006,
-                       String g_tc_fac007, String g_tc_fac008, String g_tc_fac011) {
-        try {
-            ContentValues args = new ContentValues();
-            args.put(tc_fac001, g_tc_fac001);
-            args.put(tc_fac002, g_tc_fac002);
-            args.put(tc_fac003, g_tc_fac003);
-            args.put(tc_fac004, g_tc_fac004);
-            args.put(tc_fac005, g_tc_fac005);
-            args.put(tc_fac006, g_tc_fac006);
-            args.put(tc_fac007, g_tc_fac007);
-            args.put(tc_fac008, g_tc_fac008);
-            args.put(tc_fac011, g_tc_fac011);
-            db.insert(TABLE_NAME_TC_FAC, null, args);
-            return "TRUE";
-        } catch (Exception e) {
-            return "FALSE";
-        }
 
-    }
 
     public void delete_table() {
-        db.delete(TABLE_NAME_TC_FAB, null  , null);
-        db.delete(TABLE_NAME_TC_FAC, null  , null);
+        db.delete(TB_dulieucoban_file, null, null);
     }
-
-    /*KT01*/
-    public Cursor getAll_tc_fab() {
-        Cursor a;
-        try {
-         /*  a  = db.query(TABLE_NAME_TC_FAB, new String[]{"rowid _id", tc_fab001,tc_fab002,tc_fab003,tc_fab004}
-                    , null, null, null, null, tc_fab002 + " DESC", null) ;*/
-            // a = db.rawQuery("SELECT * FROM " + TABLE_NAME_TC_FAB + " WHERE tc_fab001='KT01'", null);
-
-            //SQLiteDatabase db = this.getWritableDatabase();
-            String selectQuery = "SELECT * FROM " + TABLE_NAME_TC_FAB + " WHERE tc_fab001='KT01'";
-            return db.rawQuery(selectQuery, null);
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
+    
 }

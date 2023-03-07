@@ -27,7 +27,7 @@
         android:id="@+id/btnok"
         android:layout_width="100dp"
         android:layout_height="60dp"
-        android:background="@drawable/qr210_button_custom"
+        android:background="@drawable/button_custom"
         android:textColor="@color/white"
         android:text="@string/btn_ok"
         android:textSize="15sp"
