@@ -33,7 +33,6 @@ public class KT_Menu extends AppCompatActivity {
             switch (v.getId()) {
 
                 case R.id.img_iconmap: {
-//ththt
                     Intent QR010 = new Intent();
                     QR010.setClass(KT_Menu.this, KT_Main.class);
                     Bundle bundle = new Bundle();
