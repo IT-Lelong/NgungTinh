@@ -43,10 +43,6 @@
             android:exported="false"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".KTnew.Detail"
-            android:exported="false"
-            android:screenOrientation="landscape"/>
-        <activity
             android:name=".KTnew.KT_Main"
             android:exported="false"
             android:screenOrientation="landscape"/>

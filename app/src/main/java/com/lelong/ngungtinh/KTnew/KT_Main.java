@@ -10,15 +10,19 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.lelong.ngungtinh.Create_Table;
 import com.lelong.ngungtinh.R;
 
 public class KT_Main extends AppCompatActivity {
     String g_xuong;
-
+    private Create_Table db = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kt_main);
+
+        db = new Create_Table(this);
+        db.open();
 
         Button btnok = findViewById(R.id.btnok);
 
@@ -55,6 +59,7 @@ public class KT_Main extends AppCompatActivity {
                         bundle.putString("xuong", g_xuong);
                         QR020.putExtras(bundle);
                         startActivity(QR020);
+
                         break;
                     }
                 }

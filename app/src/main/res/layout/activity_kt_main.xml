@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".KTnew.KT_Main">
+    tools:context=".KTnew.KT_Main"
+    android:background="#A9EDBB"
+    android:padding="50dp">
 
     <TextView
         android:layout_width="match_parent"

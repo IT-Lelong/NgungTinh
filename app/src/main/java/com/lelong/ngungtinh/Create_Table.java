@@ -127,4 +127,21 @@ public class Create_Table {
         String[] conditionArgs = new String[] {g_xuong,idButton};
         db.delete(TB_scandata_file, condition, conditionArgs);
     }
+
+    //Kiểm tra vị trí được quét chưa
+    public int check_tb_scandata_file(String g_scanlocation,String g_scanfactory) {
+        int q_count = -1;
+        Cursor res = db.query(TB_scandata_file,
+                new String[]{"rowid _id", scan01},
+                scanfactory + "=? AND " + scanlocation + "=? ",
+                new String[]{g_scanfactory,g_scanlocation},
+                null, null, null, null);
+        res.moveToFirst();
+        if (res.getCount() > 0) {
+            q_count = res.getCount();
+        } else {
+            q_count = 0;
+        }
+        return q_count;
+    }
 }
