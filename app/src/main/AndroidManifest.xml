@@ -36,9 +36,6 @@
         android:theme="@style/Theme.NgungTinh"
         tools:targetApi="31" >
         <activity
-            android:name=".KTnew.demo"
-            android:exported="false" />
-        <activity
             android:name=".OpenScaner"
             android:exported="false"
             android:screenOrientation="portrait" />
