@@ -13,7 +13,8 @@ import com.lelong.ngungtinh.R;
 
 public class MainActivity2 extends AppCompatActivity {
     private Create_Table db = null;
-    String g_xuong,g_vitri;
+    String g_xuong, g_vitri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,20 +22,20 @@ public class MainActivity2 extends AppCompatActivity {
         db = new Create_Table(this);
         db.open();
         //A1
-        TextView A101 =this.findViewById(R.id.A101);
-        TextView A102 =this.findViewById(R.id.A102);
-        TextView A103 =this.findViewById(R.id.A103);
-        TextView A104 =this.findViewById(R.id.A104);
+        TextView A101 = this.findViewById(R.id.A101);
+        TextView A102 = this.findViewById(R.id.A102);
+        TextView A103 = this.findViewById(R.id.A103);
+        TextView A104 = this.findViewById(R.id.A104);
         //A2
-        TextView A201 =this.findViewById(R.id.A201);
-        TextView A202 =this.findViewById(R.id.A202);
-        TextView A203 =this.findViewById(R.id.A203);
-        TextView A204 =this.findViewById(R.id.A204);
+        TextView A201 = this.findViewById(R.id.A201);
+        TextView A202 = this.findViewById(R.id.A202);
+        TextView A203 = this.findViewById(R.id.A203);
+        TextView A204 = this.findViewById(R.id.A204);
         //A3
-        TextView A301 =this.findViewById(R.id.A301);
-        TextView A302 =this.findViewById(R.id.A302);
-        TextView A303 =this.findViewById(R.id.A303);
-        TextView A304 =this.findViewById(R.id.A304);
+        TextView A301 = this.findViewById(R.id.A301);
+        TextView A302 = this.findViewById(R.id.A302);
+        TextView A303 = this.findViewById(R.id.A303);
+        TextView A304 = this.findViewById(R.id.A304);
 
         //A1
         A101.setOnClickListener(btnlistener);
@@ -68,17 +69,17 @@ public class MainActivity2 extends AppCompatActivity {
         KT_Dulieu(A304);
     }
 
-    private void KT_Dulieu (TextView g_vitri) {
+    private void KT_Dulieu(TextView g_vitri) {
 
-        int chk_num = db.check_tb_scandata_file(String.valueOf(g_vitri).substring(String.valueOf(g_vitri).length()-5,String.valueOf(g_vitri).length()-1),g_xuong);
-        if (chk_num>0){
+        int chk_num = db.check_tb_scandata_file(String.valueOf(g_vitri).substring(String.valueOf(g_vitri).length() - 5, String.valueOf(g_vitri).length() - 1), g_xuong);
+        if (chk_num > 0) {
             g_vitri.setBackgroundColor(getColor(R.color.red));
-        }else {
+        } else {
             g_vitri.setBackgroundColor(getColor(R.color.purple_700));
         }
     }
 
-    private View.OnClickListener btnlistener= new View.OnClickListener() {
+    private View.OnClickListener btnlistener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -88,6 +89,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A101");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -98,6 +100,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A102");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -107,6 +110,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A103");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -116,6 +120,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A104");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -127,6 +132,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A201");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -137,6 +143,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A202");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -146,6 +153,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A203");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -155,6 +163,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A204");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -165,6 +174,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A301");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -175,6 +185,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A302");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -184,6 +195,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A303");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;
@@ -193,6 +205,7 @@ public class MainActivity2 extends AppCompatActivity {
                     QR010.setClass(MainActivity2.this, OpenScaner.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("IDButton", "A304");
+                    bundle.putString("xuong", g_xuong);
                     QR010.putExtras(bundle);
                     startActivity(QR010);
                     break;

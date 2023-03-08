@@ -27,6 +27,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -34,6 +35,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class OpenScaner extends AppCompatActivity {
@@ -45,6 +50,9 @@ public class OpenScaner extends AppCompatActivity {
     JSONArray jsonupload;
     JSONObject ujobject;
     Locale locale;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    String pattern = "###,###";
+    DecimalFormat decimalFormat;
 
     Create_Table create_table = null;
 
@@ -61,12 +69,16 @@ public class OpenScaner extends AppCompatActivity {
 
         Bundle getBundle = getIntent().getExtras();
         IDButton = getBundle.getString("IDButton");
-        g_xuong = getBundle.getString("Xuong");
+        g_xuong = getBundle.getString("xuong");
         g_server = getBundle.getString("SERVER");
         g_server = "PHPtest";
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("棟別: " + g_xuong + "位置: " + IDButton);
+
+        Locale locales = new Locale("en", "EN");
+        decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locales);
+        decimalFormat.applyPattern(pattern);
 
         CameraSetting();
         firstDetected = true;
@@ -95,7 +107,7 @@ public class OpenScaner extends AppCompatActivity {
                     res = create_table.insScanData(
                             tv_qrcode.getText().toString().trim(),
                             tv_qc.getText().toString().trim(),
-                            tv_soluong.getText().toString().trim(),
+                            tv_soluong.getText().toString().trim().replace(",", ""),
                             tv_tuan.getText().toString().trim(),
                             tv_ngaysac.getText().toString().trim(),
                             tv_ngayvao.getText().toString().trim(),
@@ -161,20 +173,30 @@ public class OpenScaner extends AppCompatActivity {
             String g_doncong = g_code.substring(0, 16).trim();
             final String res = getcodedata("http://172.16.40.20/" + g_server + "/TechAPP/getDataPallet.php?item=" + g_doncong);
             if (res.length() > 0 && !res.equals("FALSE")) {
-                tv_qrcode.setText(g_doncong);
-                tv_qc.setText("WTZ5S(COS)");
-                tv_soluong.setText("15,000");
-                tv_tuan.setText("2023010");
-                tv_ngaysac.setText("2023/03/10");
-                tv_ngayvao.setText("2023/03/10");
-                SaveCode = g_code;
+                //[{"SFB01":"BC51A-2112000001","IMAUD04":"WTZ6VIS(COS)","SFB08":"15000","TA_SFB010":"2021048"}
+                try {
+                    JSONArray jsonArray = new JSONArray(res);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    tv_qrcode.setText(g_doncong);
+                    tv_qc.setText(jsonObject.getString("IMAUD04").toString().trim());
+                    int g_sfb08 = Integer.parseInt(jsonObject.getString("SFB08"));
+                    tv_soluong.setText(String.valueOf(decimalFormat.format(g_sfb08)));
+                    tv_tuan.setText(jsonObject.getString("TA_SFB010").toString().trim());
+                    tv_ngaysac.setText(dateFormat.format(new Date()).toString());
+                    tv_ngayvao.setText(dateFormat.format(new Date()).toString());
+                    SaveCode = g_code;
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
             } else {
                 tv_qrcode.setText(g_code.substring(0, 16));
                 tv_qc.setText("WTZ5S(COS)");
                 tv_soluong.setText("15,000");
                 tv_tuan.setText("2023010");
-                tv_ngaysac.setText("2023/03/10");
-                tv_ngayvao.setText("2023/03/10");
+                tv_ngaysac.setText(dateFormat.format(new Date()).toString());
+                tv_ngayvao.setText(dateFormat.format(new Date()).toString());
                 SaveCode = g_code;
             }
         }

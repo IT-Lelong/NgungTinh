@@ -100,7 +100,7 @@ public class Create_Table {
             args.put(scanqrcode, g_scanqrcode);
             args.put(scanlocation, g_scanlocation);
             args.put(scanfactory, g_scanfactory);
-            db.insert(TB_basic_data_file, null, args);
+            db.insert(TB_scandata_file, null, args);
             return "TRUE";
         } catch (Exception e) {
             return "FALSE";
