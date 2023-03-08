@@ -29,8 +29,81 @@ public class KT_Menu extends AppCompatActivity {
         Create_Table create_table = new Create_Table(this);
         create_table.open();
         create_table.createTable();
+        /*create_table.insBasicData("C","A1","01",3,0);
+        create_table.insBasicData("C","A1","02",3,0);
+        create_table.insBasicData("C","A1","03",3,0);
+        create_table.insBasicData("C","A1","04",3,0);
+        create_table.insBasicData("C","A2","01",3,0);
+        create_table.insBasicData("C","A2","02",3,0);
+        create_table.insBasicData("C","A2","03",3,0);
+        create_table.insBasicData("C","A2","04",3,0);
+        create_table.insBasicData("C","A3","01",3,0);
+        create_table.insBasicData("C","A3","02",3,0);
+        create_table.insBasicData("C","A3","03",3,0);
+        create_table.insBasicData("C","A3","04",3,0);
+        create_table.insBasicData("C","B1","01",3,0);
+        create_table.insBasicData("C","B1","02",3,0);
+        create_table.insBasicData("C","B1","03",3,0);
+        create_table.insBasicData("C","B1","04",3,0);
+        create_table.insBasicData("C","B2","01",3,0);
+        create_table.insBasicData("C","B2","02",3,0);
+        create_table.insBasicData("C","B2","03",3,0);
+        create_table.insBasicData("C","B2","04",3,0);
+        create_table.insBasicData("C","B3","01",3,0);
+        create_table.insBasicData("C","B3","02",3,0);
+        create_table.insBasicData("C","B3","03",3,0);
+        create_table.insBasicData("C","B3","04",3,0);
+        create_table.insBasicData("D","A1","01",3,0);
+        create_table.insBasicData("D","A1","02",3,0);
+        create_table.insBasicData("D","A1","03",3,0);
+        create_table.insBasicData("D","A1","04",3,0);
+        create_table.insBasicData("D","A2","01",3,0);
+        create_table.insBasicData("D","A2","02",3,0);
+        create_table.insBasicData("D","A2","03",3,0);
+        create_table.insBasicData("D","A2","04",3,0);
+        create_table.insBasicData("D","A3","01",3,0);
+        create_table.insBasicData("D","A3","02",3,0);
+        create_table.insBasicData("D","A3","03",3,0);
+        create_table.insBasicData("D","A3","04",3,0);
+        create_table.insBasicData("D","B1","01",3,0);
+        create_table.insBasicData("D","B1","02",3,0);
+        create_table.insBasicData("D","B1","03",3,0);
+        create_table.insBasicData("D","B1","04",3,0);
+        create_table.insBasicData("D","B2","01",3,0);
+        create_table.insBasicData("D","B2","02",3,0);
+        create_table.insBasicData("D","B2","03",3,0);
+        create_table.insBasicData("D","B2","04",3,0);
+        create_table.insBasicData("D","B3","01",3,0);
+        create_table.insBasicData("D","B3","02",3,0);
+        create_table.insBasicData("D","B3","03",3,0);
+        create_table.insBasicData("D","B3","04",3,0);
+        create_table.insBasicData("I","A1","01",3,0);
+        create_table.insBasicData("I","A1","02",3,0);
+        create_table.insBasicData("I","A1","03",3,0);
+        create_table.insBasicData("I","A1","04",3,0);
+        create_table.insBasicData("I","A2","01",3,0);
+        create_table.insBasicData("I","A2","02",3,0);
+        create_table.insBasicData("I","A2","03",3,0);
+        create_table.insBasicData("I","A2","04",3,0);
+        create_table.insBasicData("I","A3","01",3,0);
+        create_table.insBasicData("I","A3","02",3,0);
+        create_table.insBasicData("I","A3","03",3,0);
+        create_table.insBasicData("I","A3","04",3,0);
+        create_table.insBasicData("I","B1","01",3,0);
+        create_table.insBasicData("I","B1","02",3,0);
+        create_table.insBasicData("I","B1","03",3,0);
+        create_table.insBasicData("I","B1","04",3,0);
+        create_table.insBasicData("I","B2","01",3,0);
+        create_table.insBasicData("I","B2","02",3,0);
+        create_table.insBasicData("I","B2","03",3,0);
+        create_table.insBasicData("I","B2","04",3,0);
+        create_table.insBasicData("I","B3","01",3,0);
+        create_table.insBasicData("I","B3","02",3,0);
+        create_table.insBasicData("I","B3","03",3,0);
+        create_table.insBasicData("I","B3","04",3,0);*/
 
     }
+
     private ImageButton.OnClickListener btnlistener = new ImageButton.OnClickListener() {
         @Override
         public void onClick(View v) {

@@ -42,23 +42,21 @@ import java.util.Date;
 import java.util.Locale;
 
 public class OpenScaner extends AppCompatActivity {
-    SurfaceView surfaceView, surfaceView_upload;
-    CameraSource cameraSource, cameraSource_upload;
-    BarcodeDetector barcodeDetector, barcodeDetector_upload;
+    SurfaceView surfaceView;
+    CameraSource cameraSource;
+    BarcodeDetector barcodeDetector;
     boolean firstDetected = true;
-    boolean firstDetected_upload = true;
-    JSONArray jsonupload;
-    JSONObject ujobject;
+
     Locale locale;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
     String pattern = "###,###";
     DecimalFormat decimalFormat;
-
     Create_Table create_table = null;
 
     TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_soluong, tv_qc;
     Button btn_addQrcode, btn_DelQrcode;
     String IDButton, g_xuong, g_server, SaveCode;
+    String g_khu,g_vitri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +69,8 @@ public class OpenScaner extends AppCompatActivity {
         IDButton = getBundle.getString("IDButton");
         g_xuong = getBundle.getString("xuong");
         g_server = getBundle.getString("SERVER");
+        g_khu = IDButton.substring(0, 2);
+        g_vitri = IDButton.substring(2, 4);
         g_server = "PHPtest";
 
         ActionBar actionBar = getSupportActionBar();
@@ -113,6 +113,8 @@ public class OpenScaner extends AppCompatActivity {
                             tv_ngayvao.getText().toString().trim(),
                             SaveCode, IDButton, g_xuong);
 
+                    create_table.upd_BasicData(g_xuong, g_khu, g_vitri,"+ 1");
+
                     if (res.equals("TRUE")) {
                         Toast.makeText(this, "完成存放", Toast.LENGTH_SHORT).show();
                         firstDetected = true;
@@ -125,6 +127,7 @@ public class OpenScaner extends AppCompatActivity {
 
         btn_DelQrcode.setOnClickListener(v -> {
             create_table.delData(g_xuong, IDButton);
+            create_table.upd_BasicData(g_xuong, g_khu, g_vitri,"- 1");
             SaveCode = "";
             tv_qrcode.setText("");
             tv_ngayvao.setText("");

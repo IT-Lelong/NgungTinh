@@ -2,8 +2,10 @@ package com.lelong.ngungtinh.KTnew;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -69,8 +71,8 @@ public class MainActivity2 extends AppCompatActivity {
         KT_Dulieu(A304);
     }
 
-    private void KT_Dulieu(TextView g_vitri) {
 
+    private void KT_Dulieu(TextView g_vitri) {
         int chk_num = db.check_tb_scandata_file(String.valueOf(g_vitri).substring(String.valueOf(g_vitri).length() - 5, String.valueOf(g_vitri).length() - 1), g_xuong);
         if (chk_num > 0) {
             g_vitri.setBackgroundColor(getColor(R.color.red));
