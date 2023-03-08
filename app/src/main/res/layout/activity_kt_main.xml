@@ -7,12 +7,13 @@
     android:orientation="vertical"
     tools:context=".KTnew.KT_Main"
     android:background="#A9EDBB"
-    android:padding="50dp">
+    android:padding="20dp">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_gravity="center"
         android:text="Xưởng"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -20,7 +21,7 @@
 
     <Spinner
         android:id="@+id/cbxxuong"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         />
@@ -34,5 +35,13 @@
         android:text="@string/btn_ok"
         android:textSize="15sp"
         android:layout_gravity="center"/>
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barchart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
+
+
 
 </LinearLayout>
