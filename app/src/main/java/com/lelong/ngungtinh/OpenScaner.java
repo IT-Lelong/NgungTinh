@@ -74,7 +74,7 @@ public class OpenScaner extends AppCompatActivity {
         g_server = "PHPtest";
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("棟別: " + g_xuong + "位置: " + IDButton);
+        actionBar.setTitle("棟別: " + g_xuong + "    位置: " + IDButton);
 
         Locale locales = new Locale("en", "EN");
         decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locales);
