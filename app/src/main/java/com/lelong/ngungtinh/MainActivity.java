@@ -236,16 +236,16 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast alert = Toast.makeText(MainActivity.this, getString(R.string.main_E02), Toast.LENGTH_LONG);
-                                alert.show();
+                                //Toast alert = Toast.makeText(MainActivity.this, getString(R.string.main_E02), Toast.LENGTH_LONG);
+                                //alert.show();
                             }
                         });
                     } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast alert = Toast.makeText(MainActivity.this, getString(R.string.main_E03), Toast.LENGTH_LONG);
-                                alert.show();
+                                //Toast alert = Toast.makeText(MainActivity.this, getString(R.string.main_E03), Toast.LENGTH_LONG);
+                                //alert.show();
 
                                 Intent login = new Intent();
                                 login.setClass(MainActivity.this, KT_Menu.class);
@@ -261,8 +261,15 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast alert = Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG);
-                            alert.show();
+                            //Toast alert = Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG);
+                            //alert.show();
+                            Intent login = new Intent();
+                            login.setClass(MainActivity.this, KT_Menu.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ID", editID.getText().toString());
+                            bundle.putString("SERVER", g_server);
+                            login.putExtras(bundle);
+                            startActivity(login);
                         }
                     });
                 }
