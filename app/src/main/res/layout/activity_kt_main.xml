@@ -4,44 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".KTnew.KT_Main"
     android:background="#A9EDBB"
-    android:padding="20dp">
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".KTnew.KT_Main">
 
     <TextView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_gravity="center"
-        android:text="Xưởng"
+        android:gravity="center"
+        android:text="選擇棟別"
+        android:textColor="@color/black"
         android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"/>
+        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/cbxxuong"
+        android:theme="@style/SpinnerTextStyle"
+        android:spinnerItemStyle="@style/SpinnerItem"
+        android:dropDownItemStyle="@style/SpinnerItem"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        />
+
+         />
 
     <Button
         android:id="@+id/btnok"
         android:layout_width="100dp"
         android:layout_height="60dp"
+        android:layout_gravity="center"
         android:background="@drawable/button_custom"
+        android:text="確定"
         android:textColor="@color/white"
-        android:text="@string/btn_ok"
-        android:textSize="15sp"
-        android:layout_gravity="center"/>
+        android:textSize="15sp" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barchart"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        />
-
+        android:layout_height="300dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
 
 </LinearLayout>

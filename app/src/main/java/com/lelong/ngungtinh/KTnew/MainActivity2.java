@@ -1,5 +1,6 @@
 package com.lelong.ngungtinh.KTnew;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -18,34 +19,37 @@ public class MainActivity2 extends AppCompatActivity {
     String g_xuong, g_vitri;
 
     //A1
-    TextView A101 ,A102 ,A103 ,A104 ;
+    TextView A101, A102, A103, A104;
     //A2
-    TextView A201 ,A202,A203 ,A204 ;
+    TextView A201, A202, A203, A204;
     //A3
-    TextView A301 ,A302 ,A303 ,A304 ;
+    TextView A301, A302, A303, A304;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         db = new Create_Table(this);
         db.open();
 
         //A1
-         A101 = this.findViewById(R.id.A101);
-         A102 = this.findViewById(R.id.A102);
-         A103 = this.findViewById(R.id.A103);
-         A104 = this.findViewById(R.id.A104);
+        A101 = this.findViewById(R.id.A101);
+        A102 = this.findViewById(R.id.A102);
+        A103 = this.findViewById(R.id.A103);
+        A104 = this.findViewById(R.id.A104);
         //A2
-         A201 = this.findViewById(R.id.A201);
-         A202 = this.findViewById(R.id.A202);
-         A203 = this.findViewById(R.id.A203);
-         A204 = this.findViewById(R.id.A204);
+        A201 = this.findViewById(R.id.A201);
+        A202 = this.findViewById(R.id.A202);
+        A203 = this.findViewById(R.id.A203);
+        A204 = this.findViewById(R.id.A204);
         //A3
-         A301 = this.findViewById(R.id.A301);
-         A302 = this.findViewById(R.id.A302);
-         A303 = this.findViewById(R.id.A303);
-         A304 = this.findViewById(R.id.A304);
+        A301 = this.findViewById(R.id.A301);
+        A302 = this.findViewById(R.id.A302);
+        A303 = this.findViewById(R.id.A303);
+        A304 = this.findViewById(R.id.A304);
 
         //A1
         A101.setOnClickListener(btnlistener);
@@ -102,9 +106,11 @@ public class MainActivity2 extends AppCompatActivity {
         if (chk_num > 0) {
             g_vitri.setBackgroundResource(R.drawable.border_listview_red);
             g_vitri.setTextColor(getResources().getColor(R.color.white));
-            } else {
+            g_vitri.setPadding(0,3,0,3);
+        } else {
             g_vitri.setBackgroundResource(R.drawable.boder_title_view);
             g_vitri.setTextColor(getResources().getColor(R.color.white));
+            g_vitri.setPadding(0,3,0,3);
         }
     }
 

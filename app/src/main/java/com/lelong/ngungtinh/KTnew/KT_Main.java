@@ -8,7 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -25,20 +27,22 @@ import java.util.ArrayList;
 public class KT_Main extends AppCompatActivity {
     String g_xuong;
     private Create_Table db = null;
-    //private PieChart mChart;
-    private CombinedChart mChart;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kt_main);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         db = new Create_Table(this);
         db.open();
 
         Button btnok = findViewById(R.id.btnok);
 
         Spinner sp_xuong = findViewById(R.id.cbxxuong);
+
         String[] type = {"C", "D", "I"};
         ArrayAdapter<String> typelist = new ArrayAdapter<>(KT_Main.this,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -84,17 +88,17 @@ public class KT_Main extends AppCompatActivity {
 
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         barEntries.add(new BarEntry(1, 10));
-        barEntries.add(new BarEntry(2, 20));
-        barEntries.add(new BarEntry(3, 30));
-        barEntries.add(new BarEntry(4, 40));
+        barEntries.add(new BarEntry(2, 90));
+        barEntries.add(new BarEntry(3, 65));
+        //barEntries.add(new BarEntry(4, 50));
 
         ArrayList<String> labels = new ArrayList<>();
-        labels.add("Column 1");
-        labels.add("Column 2");
-        labels.add("Column 3");
-        labels.add("Column 4");
+        labels.add("C棟");
+        labels.add("D棟");
+        labels.add("I棟");
+        //labels.add("Column 4");
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Columns");
+        BarDataSet barDataSet = new BarDataSet(barEntries, "棟別");
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
         BarData barData = new BarData(barDataSet);

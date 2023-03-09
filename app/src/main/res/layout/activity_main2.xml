@@ -4,15 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="1"
+    android:orientation="vertical"
     tools:context=".KTnew.MainActivity2">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="A區"
+        android:textSize="60sp"
+        android:textStyle="bold" />
 
     <TableLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
         android:shrinkColumns="*"
         android:stretchColumns="*">
 
@@ -25,7 +34,7 @@
                 android:layout_span="2"
                 android:gravity="center"
                 android:text="A3"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -35,7 +44,7 @@
                 android:layout_span="2"
                 android:gravity="center"
                 android:text="A2"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -45,7 +54,7 @@
                 android:layout_span="2"
                 android:gravity="center"
                 android:text="A1"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold" />
         </TableRow>
 
@@ -348,4 +357,43 @@
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="12" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/border_listview_red"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center|left"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="無存放電池"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/boder_title_view"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center|left"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="已有放電池"/>
+
+    </LinearLayout>
 </LinearLayout>

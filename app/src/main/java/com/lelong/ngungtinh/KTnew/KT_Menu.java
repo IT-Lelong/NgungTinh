@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lelong.ngungtinh.Create_Table;
@@ -17,6 +18,9 @@ public class KT_Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kt_menu);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         btn_map = findViewById(R.id.img_iconmap);
         btn_search = findViewById(R.id.img_iconsearch);
