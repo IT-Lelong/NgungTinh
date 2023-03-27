@@ -1,20 +1,28 @@
 package com.lelong.ngungtinh;
 
+import static java.security.AccessController.getContext;
+
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lelong.ngungtinh.KTnew.KT_Menu;
+import com.lelong.ngungtinh.KTnew.nt_dialog1;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,13 +32,22 @@ import java.util.Locale;
 
 public class Menu extends AppCompatActivity {
 
-    //private Create_Table Cre_db = null;
+    private Create_Table Cre_db = null;
     String g_server = "";
-    Button btn_KT01, btn_KT02, btn_KT03, btn_KT04;
+    Button btn_NT01, btn_NT02, btn_NT03, btn_NT04, btn_NT05;
     TextView menuID;
     String ID;
     Locale locale;
     private CheckAppUpdate checkAppUpdate = null;
+    //show dialog
+    Spinner cbx_xuong;
+    Spinner cbx_khu;
+    Button btn_dconf;
+    private Create_Table createTable = null;
+    Cursor cursor_1, cursor_2;
+    String[] station = new String[0];
+    ArrayAdapter<String> stationlist;
+    String v_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +55,30 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        Bundle getbundle = getIntent().getExtras();
+
         //actionBar = getSupportActionBar();
         //actionBar.hide();
-
+        Bundle getbundle = getIntent().getExtras();
         ID = getbundle.getString("ID");
         g_server = getbundle.getString("SERVER");
         menuID = (TextView) findViewById(R.id.menuID);
         new IDname().execute("http://172.16.40.20/" + g_server + "/getid.php?ID=" + ID);
 
-        //Cre_db = new Create_Table(this);
-        //Cre_db.open();
+        Cre_db = new Create_Table(this);
+        Cre_db.open();
+        Cre_db.createTable();
 
-        btn_KT01 = findViewById(R.id.btn_KT01);
-        btn_KT02 = findViewById(R.id.btn_KT02);
-        btn_KT03 = findViewById(R.id.btn_KT03);
-        btn_KT04 = findViewById(R.id.btn_KT04);
+        btn_NT01 = findViewById(R.id.btn_NT01);
+        btn_NT02 = findViewById(R.id.btn_NT02);
+        btn_NT03 = findViewById(R.id.btn_NT03);
+        btn_NT04 = findViewById(R.id.btn_NT04);
+        btn_NT05 = findViewById(R.id.btn_NT05);
 
-        btn_KT01.setOnClickListener(btnlistener);
-        btn_KT02.setOnClickListener(btnlistener);
-        btn_KT03.setOnClickListener(btnlistener);
-        btn_KT04.setOnClickListener(btnlistener);
+        btn_NT01.setOnClickListener(btnlistener);
+        btn_NT02.setOnClickListener(btnlistener);
+        btn_NT03.setOnClickListener(btnlistener);
+        btn_NT04.setOnClickListener(btnlistener);
+        btn_NT05.setOnClickListener(btnlistener);
 
     }
 
@@ -109,20 +129,123 @@ public class Menu extends AppCompatActivity {
         public void onClick(View v) {
             //利用switch case方法，之後新增按鈕只需新增case即可
             switch (v.getId()) {
+                //Quét nhập
+                case R.id.btn_NT01: {
+                    String INOUT = "IN";
 
-                case R.id.btn_KT01: {
-                    Intent QR010 = new Intent();
-                    QR010.setClass(Menu.this, KT_Menu.class);
+                    Dialog dialog = new Dialog(v.getContext());
+                    dialog.setContentView(R.layout.nt_dialog1);
+
+                    cbx_xuong = dialog.findViewById(R.id.cbx_dxuong);
+                    createTable = new Create_Table(dialog.getContext());
+                    createTable.open();
+                    check_plant(v.getContext());
+                    cbx_xuong.getSelectedItem().toString();
+                    String s_xuong = cbx_xuong.getSelectedItem().toString();
+                    cbx_khu = dialog.findViewById(R.id.cbx_dkhu);
+                    check_region(v.getContext(), s_xuong);
+                    cbx_xuong.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            cbx_xuong.getSelectedItem().toString();
+                            String s_xuong = cbx_xuong.getSelectedItem().toString();
+                            check_region(v.getContext(), s_xuong);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    btn_dconf = dialog.findViewById(R.id.btn_dconf);
+                    btn_dconf.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String conf_xuong = cbx_xuong.getSelectedItem().toString();
+                            String conf_khu = cbx_khu.getSelectedItem().toString();
+                            Intent DSVT = new Intent();
+                            DSVT.setClass(Menu.this, NT_DSVT.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ID", ID);
+                            bundle.putString("INOUT", INOUT);
+                            bundle.putString("XUONG", conf_xuong);
+                            bundle.putString("KHU", conf_khu);
+                            DSVT.putExtras(bundle);
+                            startActivity(DSVT);
+                        }
+                    });
+
+
+                    dialog.show();
+                    break;
+                }
+                //Quét xuất
+                case R.id.btn_NT02: {
+                    String INOUT = "OUT";
+
+                    Dialog dialog = new Dialog(v.getContext());
+                    dialog.setContentView(R.layout.nt_dialog1);
+
+                    cbx_xuong = dialog.findViewById(R.id.cbx_dxuong);
+                    createTable = new Create_Table(dialog.getContext());
+                    createTable.open();
+                    check_plant(v.getContext());
+                    cbx_xuong.getSelectedItem().toString();
+                    String s_xuong = cbx_xuong.getSelectedItem().toString();
+                    cbx_khu = dialog.findViewById(R.id.cbx_dkhu);
+                    check_region(v.getContext(), s_xuong);
+                    cbx_xuong.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            cbx_xuong.getSelectedItem().toString();
+                            String s_xuong = cbx_xuong.getSelectedItem().toString();
+                            check_region(v.getContext(), s_xuong);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    btn_dconf = dialog.findViewById(R.id.btn_dconf);
+                    btn_dconf.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String conf_xuong = cbx_xuong.getSelectedItem().toString();
+                            String conf_khu = cbx_khu.getSelectedItem().toString();
+                            Intent DSVT = new Intent();
+                            DSVT.setClass(Menu.this, NT_DSVT.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ID", ID);
+                            bundle.putString("INOUT", INOUT);
+                            bundle.putString("XUONG", conf_xuong);
+                            bundle.putString("KHU", conf_khu);
+                            DSVT.putExtras(bundle);
+                            startActivity(DSVT);
+                        }
+                    });
+
+
+                    dialog.show();
+                    break;
+                }
+
+                case R.id.btn_NT03: {
+                    Intent NT03 = new Intent();
+                    NT03.setClass(Menu.this, NT_Setup_data.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", ID);
                     bundle.putString("SERVER", g_server);
-                    QR010.putExtras(bundle);
-                    startActivity(QR010);
+                    NT03.putExtras(bundle);
+                    startActivity(NT03);
+                    break;
                 }
 
-                /*case R.id.btn_KT02: {
+                case R.id.btn_NT05: {
                     Intent QR010 = new Intent();
-                    QR010.setClass(Menu.this, KT02_activity.class);
+                    QR010.setClass(Menu.this, NT_Setup_data.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", ID);
                     bundle.putString("SERVER", g_server);
@@ -131,18 +254,10 @@ public class Menu extends AppCompatActivity {
                     break;
                 }
 
-                case R.id.btn_KT03: {
-                    Intent QR010 = new Intent();
-                    QR010.setClass(Menu.this, KT_1.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("ID", ID);
-                    bundle.putString("SERVER", g_server);
-                    QR010.putExtras(bundle);
-                    startActivity(QR010);
-                    break;
-                }
 
-                case R.id.btn_KT04: {
+
+
+                /*case R.id.btn_KT04: {
                     Intent QR010 = new Intent();
                     QR010.setClass(Menu.this, KT_1.class);
                     Bundle bundle = new Bundle();
@@ -152,6 +267,7 @@ public class Menu extends AppCompatActivity {
                     startActivity(QR010);
                     break;
                 }*/
+
 
             }
         }
@@ -271,4 +387,54 @@ public class Menu extends AppCompatActivity {
         }
         resources.updateConfiguration(configuration, displayMetrics);
     }
+
+    private void check_plant(Context dialog1) {
+        cursor_1 = createTable.getAll_setup_01();
+        cursor_1.moveToFirst();
+        int num = cursor_1.getCount();
+        station = new String[num];
+        for (int i = 0; i < num; i++) {
+
+            try {
+                @SuppressLint("Range") String setup01 = cursor_1.getString(cursor_1.getColumnIndex("setup01"));
+
+                String g_setup01 = setup01;
+                station[i] = g_setup01;
+
+            } catch (Exception e) {
+                String err = e.toString();
+            }
+            cursor_1.moveToNext();
+        }
+        stationlist = new ArrayAdapter<>(dialog1, android.R.layout.simple_spinner_item, station);
+        cbx_xuong.setAdapter(stationlist);
+        cbx_xuong.setAdapter(stationlist);
+        cbx_xuong.setSelection(0);
+    }
+
+    private void check_region(Context dialog2, String lxuong) {
+        cursor_1 = createTable.getAll_setup_02(lxuong);
+        cursor_1.moveToFirst();
+        int num = cursor_1.getCount();
+        station = new String[num];
+        for (int i = 0; i < num; i++) {
+
+            try {
+                @SuppressLint("Range") String setup02 = cursor_1.getString(cursor_1.getColumnIndex("setup02"));
+
+                String g_setup02 = setup02;
+                station[i] = g_setup02;
+
+            } catch (Exception e) {
+                String err = e.toString();
+            }
+            cursor_1.moveToNext();
+        }
+        stationlist = new ArrayAdapter<>(dialog2, android.R.layout.simple_spinner_item, station);
+        cbx_khu.setAdapter(stationlist);
+        cbx_khu.setAdapter(stationlist);
+        cbx_khu.setSelection(0);
+
+    }
+
 }

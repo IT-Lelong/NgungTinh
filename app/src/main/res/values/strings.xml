@@ -14,11 +14,12 @@
     <string name="tt_soluong">數量</string>
 
     /*Menu Button*/
-    <string name="btn_KT01">設備管理稽核評分表 </string>
-    <string name="btn_KT02">(週)柴油堆高機檢查稽查表</string>
-    <string name="btn_KT03">廢水站操作日誌</string>
-    <string name="btn_KT04">廢水水質自動,連續監測站操作日記</string>
-    <string name="Change_Data">更新報表項目</string>
+    <string name="btn_nt01">掃描入庫 </string>
+    <string name="btn_nt02">掃描出庫</string>
+    <string name="btn_nt03">查詢</string>
+    <string name="btn_nt04">清單</string>
+    <string name="btn_nt05">設立基本資料</string>
+
 
     /* activity_main */
     <string name="main_id">帳號：</string>
@@ -43,4 +44,26 @@
     <string name="E01">帳號密碼錯誤</string>
     <string name="E02">連線錯誤</string>
     <string name="E10">請輸入帳號</string>
+
+    /*nt_dialog1*/
+    <string name="tt_diaxuong">廠別</string>
+    <string name="tt_diakhu">儲位</string>
+    <string name="btn_dconf">確認</string>
+
+    /*nt_setup_data*/
+    <string name="nt_sxuong">廠別</string>
+    <string name="nt_skhu">儲位</string>
+    <string name="nt_scon">子位置</string>
+    <string name="btn_sinsert">新增</string>
+    <string name="nt_danhsach">清單</string>
+
+    //scandata
+    <string name="sc_tt">電池批號資訊</string>
+    <string name="sc_doncong">工單編號</string>
+    <string name="sc_quycach">規格</string>
+    <string name="sc_soluong">數量</string>
+    <string name="sc_ngaysac">進靜置區日期</string>
+    <string name="btsc_insert">存放</string>
+    <string name="btsc_delete">清除</string>
+
 </resources>

@@ -41,9 +41,9 @@
 
     <style name="SpinnerItem" parent="Widget.AppCompat.DropDownItem.Spinner">
         <item name="android:textColor">@color/red</item>
-        <item name="android:textSize">150sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="MySpinnerTextAppearance" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">

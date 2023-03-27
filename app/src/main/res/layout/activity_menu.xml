@@ -35,51 +35,63 @@
 
         <TableRow>
             <Button
-                android:id="@+id/btn_KT01"
+                android:id="@+id/btn_NT01"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_type1"
                 android:theme="@style/btn_text_style"
                 android:enabled="true"
-                android:text="@string/btn_KT01"
+                android:text="@string/btn_nt01"
                 />
         </TableRow>
 
         <TableRow>
             <Button
-                android:id="@+id/btn_KT02"
+                android:id="@+id/btn_NT02"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_type1"
                 android:theme="@style/btn_text_style"
                 android:enabled="true"
-                android:text="@string/btn_KT02"/>
+                android:text="@string/btn_nt02"/>
         </TableRow>
 
         <TableRow>
             <Button
-                android:id="@+id/btn_KT03"
+                android:id="@+id/btn_NT03"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_type1"
                 android:theme="@style/btn_text_style"
                 android:enabled="true"
-                android:text="@string/btn_KT03"/>
+                android:text="@string/btn_nt03"/>
         </TableRow>
 
         <TableRow>
             <Button
-                android:id="@+id/btn_KT04"
+                android:id="@+id/btn_NT04"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_type1"
                 android:theme="@style/btn_text_style"
                 android:enabled="true"
-                android:text="@string/btn_KT04"/>
+                android:text="@string/btn_nt04"/>
+        </TableRow>
+
+        <TableRow>
+            <Button
+                android:id="@+id/btn_NT05"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_type1"
+                android:theme="@style/btn_text_style"
+                android:enabled="true"
+                android:text="@string/btn_nt05"/>
         </TableRow>
     </TableLayout>
 

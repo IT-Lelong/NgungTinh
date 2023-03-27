@@ -115,7 +115,7 @@ public class KT_Menu extends AppCompatActivity {
 
                 case R.id.img_iconmap: {
                     Intent QR010 = new Intent();
-                    QR010.setClass(KT_Menu.this, KT_Main.class);
+                    QR010.setClass(KT_Menu.this, nt_dialog1.class);
                     Bundle bundle = new Bundle();
                     //bundle.putString("ID", ID);
                     //bundle.putString("SERVER", g_server);

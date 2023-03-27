@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 //離線登入
                 if (ID.length() > 0) {
                     Intent login = new Intent();
-                    login.setClass(MainActivity.this, KT_Menu.class);
+                    login.setClass(MainActivity.this, Menu.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", editID.getText().toString());
                     bundle.putString("SERVER", g_server);
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         Intent login = new Intent();
-                        login.setClass(MainActivity.this, KT_Menu.class);
+                        login.setClass(MainActivity.this, Menu.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("ID", editID.getText().toString());
                         bundle.putString("SERVER", g_server);
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                                 //alert.show();
 
                                 Intent login = new Intent();
-                                login.setClass(MainActivity.this, KT_Menu.class);
+                                login.setClass(MainActivity.this, Menu.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("ID", editID.getText().toString());
                                 bundle.putString("SERVER", g_server);
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                             //Toast alert = Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG);
                             //alert.show();
                             Intent login = new Intent();
-                            login.setClass(MainActivity.this, KT_Menu.class);
+                            login.setClass(MainActivity.this, Menu.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("ID", editID.getText().toString());
                             bundle.putString("SERVER", g_server);

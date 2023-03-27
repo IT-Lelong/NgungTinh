@@ -15,11 +15,11 @@
     <string name="tt_soluong">Số lượng</string>
 
     /*Menu Button*/
-    <string name="btn_KT01">BIỂU ĐIỂM KHẢO HẠCH QUẢN LÝ THIẾT BỊ</string>
-    <string name="btn_KT02">BIỂU GHI CHÉP  KIỂM TRA XE NÂNG DẦU (TUẦN)</string>
-    <string name="btn_KT03">NHẬT KÝ VẬN HÀNH TRẠM NƯỚC THẢI</string>
-    <string name="btn_KT04">NHẬT KÝ VẬN HÀNH TRẠM QUAN TRẮC NƯỚC THẢI</string>
-    <string name="Change_Data">Cập nhật dữ liệu hạng mục</string>
+    <string name="btn_nt01">QUÉT NHẬP</string>
+    <string name="btn_nt02">QUÉT XUẤT</string>
+    <string name="btn_nt03">TRA CỨU</string>
+    <string name="btn_nt04">DANH SÁCH</string>
+    <string name="btn_nt05">THIẾP LẬP DỮ LIỆU</string>
 
     /* activity_main */
     <string name="main_id">Tài khoản：</string>
@@ -44,4 +44,25 @@
     <string name="E01">Tài khoản hoặc mật khẩu không đúng</string>
     <string name="E02">Liên kết máy chủ thất bại</string>
     <string name="E10">Xin nhập số tài khoản</string>
+
+    /*nt_dialog1*/
+    <string name="tt_diaxuong">Xưởng</string>
+    <string name="tt_diakhu">Khu</string>
+    <string name="btn_dconf">Xác nhận</string>
+
+    /*nt_setup_data*/
+    <string name="nt_sxuong">Xưởng</string>
+    <string name="nt_skhu">Khu</string>
+    <string name="nt_scon">Vị trí</string>
+    <string name="btn_sinsert">Thêm mới</string>
+    <string name="nt_danhsach">Danh sách</string>
+
+    //scandata
+    <string name="sc_tt">Thông tin bình điện</string>
+    <string name="sc_doncong">Mã đơn công</string>
+    <string name="sc_quycach">Quy cách</string>
+    <string name="sc_soluong">Số lượng</string>
+    <string name="sc_ngaysac">Ngày vào khu ngưng tịnh</string>
+    <string name="btsc_insert">Lưu</string>
+    <string name="btsc_delete">Xóa</string>
 </resources>
