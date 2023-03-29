@@ -234,7 +234,7 @@ public class Menu extends AppCompatActivity {
 
                 case R.id.btn_NT03: {
                     Intent NT03 = new Intent();
-                    NT03.setClass(Menu.this, NT_Setup_data.class);
+                    NT03.setClass(Menu.this, NT_search.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", ID);
                     bundle.putString("SERVER", g_server);

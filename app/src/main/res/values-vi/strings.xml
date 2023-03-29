@@ -65,4 +65,7 @@
     <string name="sc_ngaysac">Ngày vào khu ngưng tịnh</string>
     <string name="btsc_insert">Lưu</string>
     <string name="btsc_delete">Xóa</string>
+
+    <string name="tt_stt">STT</string>
+
 </resources>

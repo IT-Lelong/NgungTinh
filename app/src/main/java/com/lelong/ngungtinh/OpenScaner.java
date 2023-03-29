@@ -138,7 +138,7 @@ public class OpenScaner extends AppCompatActivity {
                     } else {
                         //insert dữ liệu vào table tổng
                         res1 = create_table.insTotal_sdata(conf_xuong, conf_khu,
-                                l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""));
+                                l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""),tv_qc.getText().toString().trim());
                         if (res1.equals("TRUE")) {
                             firstDetected = true;
                         } else {

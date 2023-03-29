@@ -51,6 +51,7 @@ public class Create_Table {
     String sdata03 = "sdata03"; //Vị trí con
     String sdata04 = "sdata04"; //Đơn công
     String sdata05 = "sdata05"; //Số lượng
+    String sdata06 = "sdata06"; //Quy cách
 
 
     String CREATE_TB_basic_data_file = "CREATE TABLE IF NOT EXISTS " + TB_basic_data_file + " ("
@@ -66,10 +67,10 @@ public class Create_Table {
     //+ scanqrcode + " TEXT," + scanlocation + " TEXT," + scanfactory + " TEXT )";  // by Andy mark 23032301
 
     String CREATE_TB_setup_data_file = "CREATE TABLE IF NOT EXISTS " + TB_setup_data_file + " ("
-            + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT )";
+            + setup01 + " TEXT," + setup02 + " TEXT," + setup03 + " TEXT )";
 
     String CREATE_TB_total_sdata_file = "CREATE TABLE IF NOT EXISTS " + TB_total_sdata_file + " ("
-            + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT )";
+            + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT," + sdata06 + " TEXT )";
 
     public Create_Table(Context ctx) {
         this.mCtx = ctx;
@@ -248,7 +249,7 @@ public class Create_Table {
     }
 
     //insert  total_sdata
-    public String insTotal_sdata(String g_sdata01, String g_sdata02, String g_sdata03, String g_sdata04, String g_sdata05) {
+    public String insTotal_sdata(String g_sdata01, String g_sdata02, String g_sdata03, String g_sdata04, String g_sdata05, String g_sdata06) {
         try {
             ContentValues args = new ContentValues();
             args.put(sdata01, g_sdata01);
@@ -256,6 +257,7 @@ public class Create_Table {
             args.put(sdata03, g_sdata03);
             args.put(sdata04, g_sdata04);
             args.put(sdata05, g_sdata05);
+            args.put(sdata06, g_sdata06);
             db.insert(TB_total_sdata_file, null, args);
             return "TRUE";
         } catch (Exception e) {
@@ -323,5 +325,64 @@ public class Create_Table {
         db.execSQL("UPDATE " + TB_basic_data_file +
                 " SET dulieu05 = dulieu05 " + i + " " +
                 " WHERE dulieu01 = '" + gXuong + "' And dulieu02 = '" + gKhu + "' And dulieu03 = '" + gVitri + "' ");
+    }
+
+    //kiểm tra dữ liệu quy cach
+    public Cursor getAll_sdata_06() {
+        Cursor a;
+        try {
+
+            //SQLiteDatabase db = this.getWritableDatabase();
+            String selectQuery = "SELECT distinct sdata06 FROM total_sdata_file ORDER BY 1";
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Cursor getAll_sdata_01(String l_quycach) {
+        Cursor a;
+        try {
+
+            //SQLiteDatabase db = this.getWritableDatabase();
+            String selectQuery = "SELECT distinct sdata01 FROM total_sdata_file WHERE sdata06='" + l_quycach + "' ORDER BY 1";
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Cursor getAll_search_data(String l_vaont,String l_rant,String l_doncong,String l_quycach,String l_xuong) {
+        Cursor a;
+        try {
+            //SQLiteDatabase db = this.getWritableDatabase();
+            String str="";
+            if (!l_vaont.equals("") && !l_rant.equals(""))
+            {
+                str = str + " AND scan06 BETWEEN '" + l_vaont +"' AND '" + l_rant + "'  ";
+            }
+            if(!l_doncong.equals(""))
+            {
+                str = str + " AND sdata04 = '" + l_doncong + "' ";
+            }
+            if(!l_quycach.equals(""))
+            {
+                str = str + " AND sdata06= '" + l_quycach + "' ";
+            }
+            if(!l_xuong.equals(""))
+            {
+                str = str + " AND sdata01= '" + l_xuong + "' ";
+            }
+            String selectQuery = "SELECT distinct 0 _id, sdata04,sdata06,sdata05,sdata01,sdata02,sdata03 FROM total_sdata_file, scandata_file  " +
+                    " WHERE sdata01 = scan07 AND sdata04 = scan01 " ;
+            String sqlorder = " ORDER BY 1 ";
+            selectQuery = selectQuery + str + sqlorder;
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

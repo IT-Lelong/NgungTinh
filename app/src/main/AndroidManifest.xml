@@ -42,6 +42,9 @@
             android:name=".NT_Setup_data"
             android:exported="false" />
         <activity
+            android:name=".NT_search"
+            android:exported="false" />
+        <activity
             android:name=".OpenScaner"
             android:exported="false"
             android:screenOrientation="portrait" />

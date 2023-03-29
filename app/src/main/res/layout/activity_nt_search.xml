@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#A9EDBB"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/sc_ngaysac"
+                android:background="#3F51B5"
+                android:textColor="#FFFFFF"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp" />
+            <EditText
+                android:id="@+id/edt_vaont"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="2dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="~"
+                android:textColor="@color/black"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp" />
+            <EditText
+                android:id="@+id/edt_rant"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="2dp"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/sc_doncong"
+                android:background="#3F51B5"
+                android:textColor="#FFFFFF"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp" />
+            <EditText
+                android:id="@+id/edt_dc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:gravity="center"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:inputType="textCapCharacters"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginRight="2dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:layout_marginTop="1dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/sc_quycach"
+                android:background="#3F51B5"
+                android:textColor="#FFFFFF"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp" />
+            <Spinner
+                android:id="@+id/cbx_qc"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:hint="YYYY/MM/DD"
+                android:paddingLeft="10dp"
+                android:textColor="@color/black"
+                android:paddingBottom="13dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/nt_sxuong"
+                android:background="#3F51B5"
+                android:textColor="#FFFFFF"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp" />
+            <Spinner
+                android:id="@+id/cbx_x"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:layout_gravity="left|center_vertical"
+                android:gravity="left|center_vertical"
+                android:hint="YYYY/MM/DD"
+                android:paddingLeft="10dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btn_Search"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_type_nomal"
+            android:text="@string/btn_nt03"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/nt_danhsach"
+            android:textStyle="bold"
+            android:theme="@style/title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:text="@string/tt_stt"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="@string/sc_doncong"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="@string/sc_quycach"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:gravity="center"
+                android:text="@string/sc_soluong"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/nt_sxuong"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/nt_skhu"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/nt_scon"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

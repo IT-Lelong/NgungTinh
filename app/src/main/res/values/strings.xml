@@ -66,4 +66,6 @@
     <string name="btsc_insert">存放</string>
     <string name="btsc_delete">清除</string>
 
+    <string name="tt_stt">序號</string>
+
 </resources>
