@@ -20,11 +20,12 @@ public class Create_Table {
     String dulieu05 = "dulieu05"; //Đã sử dụng
 
     String TB_scandata_file = "scandata_file";
+    String scan00 = "scan00"; //Key
     String scan01 = "scan01"; //Mã đơn công
     String scan02 = "scan02"; //Quy cách
     String scan03 = "scan03"; //Sô lượng
-    //String scan04 = "scan04"; //Tuần
-    //String scan05 = "scan05"; //Ngày sạc
+    String scan04 = "scan04"; //Tuan
+    String scan05 = "scan05"; //Ngày sx
     String scan06 = "scan06"; //Ngày ngưng tịnh
 
     String scan07 = "scan07"; //Xưởng
@@ -43,6 +44,7 @@ public class Create_Table {
     String setup01 = "setup01"; //Xưởng
     String setup02 = "setup02"; //Khu
     String setup03 = "setup03"; //Vị trí con
+    //String setup04 = "setup04"; //Số lượng
 
     //tổng dữ liệu quét nhập xuất
     String TB_total_sdata_file = "total_sdata_file";
@@ -59,15 +61,15 @@ public class Create_Table {
             + dulieu04 + " DECIMAL," + dulieu05 + " DECIMAL)";
 
     String CREATE_TABLE_scandata = "CREATE TABLE IF NOT EXISTS " + TB_scandata_file + " ("
-            + scan01 + " TEXT," + scan02 + " TEXT," + scan03 + " TEXT,"
-            //+ scan04 + " TEXT," + scan05 + " TEXT," + scan06 + " TEXT,"
-            + scan06 + " TEXT,"
+            + scan00 + " TEXT," + scan01 + " TEXT," + scan02 + " TEXT," + scan03 + " TEXT,"
+            + scan04 + " TEXT," + scan05 + " TEXT," + scan06 + " TEXT,"
+            //+ scan06 + " TEXT,"
             + scan07 + " TEXT," + scan08 + " TEXT," + scan09 + " TEXT,"     // by Andy added 23032301
             + scan10 + " TEXT," + scan11 + " TEXT," + scan12 + " TEXT )";   // by Andy added 23032301
     //+ scanqrcode + " TEXT," + scanlocation + " TEXT," + scanfactory + " TEXT )";  // by Andy mark 23032301
 
     String CREATE_TB_setup_data_file = "CREATE TABLE IF NOT EXISTS " + TB_setup_data_file + " ("
-            + setup01 + " TEXT," + setup02 + " TEXT," + setup03 + " TEXT )";
+            + setup01 + " TEXT," + setup02 + " TEXT," + setup03 + " TEXT)";
 
     String CREATE_TB_total_sdata_file = "CREATE TABLE IF NOT EXISTS " + TB_total_sdata_file + " ("
             + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT," + sdata06 + " TEXT )";
@@ -125,18 +127,19 @@ public class Create_Table {
     /*public String insScanData(String g_scan01, String g_scan02, String g_scan03, String g_scan04,
                               String g_scan05, String g_scan06, String g_scanqrcode, String g_scanlocation, String g_scanfactory) {*/
 
-    public String insScanData(String g_scan01, String g_scan02, String g_scan03, String g_scan06,
-                              //String g_scan04, String g_scan05, String g_scan07, String g_scan08, String g_scan09,
+    public String insScanData(String g_scan00, String g_scan01, String g_scan02, String g_scan03,
+                              String g_scan04, String g_scan05, String g_scan06,
                               String g_scan07, String g_scan08, String g_scan09,
                               String g_scan10, String g_scan11, String g_scan12) {
         try {
             ContentValues args = new ContentValues();
+            args.put(scan00, g_scan00);
             args.put(scan01, g_scan01);
             args.put(scan02, g_scan02);
             args.put(scan03, g_scan03);
             args.put(scan06, g_scan06);
-            //args.put(scan04, g_scan04);
-            //args.put(scan05, g_scan05);
+            args.put(scan04, g_scan04);
+            args.put(scan05, g_scan05);
             args.put(scan07, g_scan07);
             args.put(scan08, g_scan08);
             args.put(scan09, g_scan09);
@@ -158,13 +161,29 @@ public class Create_Table {
         try {
 
             //SQLiteDatabase db = this.getWritableDatabase();
-            String selectQuery = "SELECT 0 _id,setup01,setup02,setup03 FROM setup_data_file  ORDER BY 2,3,4  ";
+            String selectQuery = "SELECT 0 _id,setup01,setup02,setup03  FROM setup_data_file  ORDER BY 2,3,4  ";
             return db.rawQuery(selectQuery, null);
 
         } catch (Exception e) {
             return null;
         }
     }
+
+    //show dữ liệu vị trí
+
+    public Cursor getAll_ntds_data(String ntds_xuong, String ntds_khu, String ntds_vitri) {
+        try {
+
+            //SQLiteDatabase db = this.getWritableDatabase();
+            String selectQuery = "SELECT 0 _id,sdata03,sdata04,sdata06,sdata05  FROM total_sdata_file " +
+                    "WHERE sdata01='" + ntds_xuong + "' and sdata02='" + ntds_khu + "' and sdata03='" + ntds_vitri + "' ORDER BY 2,3,4  ";
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     //kiểm tra dữ liệu show lên dialog
     public Cursor getAll_setup_01() {
@@ -220,6 +239,45 @@ public class Create_Table {
         }
     }
 
+    //Kiểm tra số lượng hiện có trong vị trí con
+    public Cursor getAll_check_total_sdata(String sd_Xuong, String sd_Khu, String sd_Vitri) {
+        Cursor a;
+        try {
+            String selectQuery = "SELECT * FROM (SELECT ifnull(sum(sdata05),0) as sdata05 FROM total_sdata_file WHERE sdata01='" + sd_Xuong + "' " +
+                    "and sdata02='" + sd_Khu + "' and sdata03='" + sd_Vitri + "'  ORDER BY 1) LIMIT 0, 1 ";
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //Kiểm tra số lượng hiện có trong vị trí con
+    public Cursor getAll_check_total_sdata2(String sd_Xuong, String sd_Khu, String sd_Vitri, String sd_doncong) {
+        Cursor a;
+        try {
+            String selectQuery = "SELECT * FROM (SELECT ifnull(sdata05,0) as sdata05 FROM total_sdata_file WHERE sdata01='" + sd_Xuong + "' " +
+                    "and sdata02='" + sd_Khu + "' and sdata03='" + sd_Vitri + "' and sdata04='" + sd_doncong + "'  ORDER BY 1) LIMIT 0, 1 ";
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //Trả về số lượng có thể chứa hiện có trong vị trí con
+    /*public Cursor getAll_standard(String sd_Xuong, String sd_Khu, String sd_Vitri) {
+        Cursor a;
+        try {
+            String selectQuery = "SELECT setup04 FROM setup_data_file WHERE setup01='" + sd_Xuong + "' " +
+                    "and setup02='" + sd_Khu + "' and setup03='" + sd_Vitri + "' ORDER BY 1";
+            return db.rawQuery(selectQuery, null);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }*/
+
     public Cursor getAll_count_01(String l_count1, String l_count2, String l_count3) {
         Cursor a;
         try {
@@ -241,6 +299,7 @@ public class Create_Table {
             args.put(setup01, g_setup01);
             args.put(setup02, g_setup02);
             args.put(setup03, g_setup03);
+            //args.put(setup04, g_setup04);
             db.insert(TB_setup_data_file, null, args);
             return "TRUE";
         } catch (Exception e) {
@@ -281,6 +340,13 @@ public class Create_Table {
         }
 
     }
+
+    //update setup_file
+    /*public void upd_setup_file(String gXuong, String gKhu, String gVitri, String gsl) {
+        db.execSQL("UPDATE " + TB_setup_data_file +
+                " SET setup04 = '" + gsl + "' " +
+                " WHERE setup01 = '" + gXuong + "' And setup02 = '" + gKhu + "' And setup03 = '" + gVitri + "' ");
+    }*/
 
     public void delete_table() {
         db.delete(TB_basic_data_file, null, null);
@@ -341,6 +407,57 @@ public class Create_Table {
         }
     }
 
+    //upload data tc_bac
+    public Cursor getAll_tc_bac(String app) {
+        try {
+            return db.rawQuery("SELECT scan00,scan01,scan02,scan03,scan04,scan05,scan06,scan07,scan08,scan09,scan10,scan11,scan12"
+
+                    + " FROM " + TB_scandata_file + "", null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //upload data tc_bad
+    public Cursor getAll_tc_bad(String app) {
+        try {
+            return db.rawQuery("SELECT sdata01,sdata02,sdata03,sdata04,sdata05,sdata06"
+
+                    + " FROM " + TB_total_sdata_file + "", null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //upload data tc_bae
+    public Cursor getAll_tc_bae(String tsetup01, String tsetup02, String tsetup03) {
+        try {
+            String selectQuery = "SELECT setup01,setup02,setup03 FROM setup_data_file WHERE setup01='" + tsetup01 + "' " +
+                    "AND setup02='" + tsetup02 + "' AND setup03='" + tsetup03 + "' ORDER BY 1";
+            return db.rawQuery(selectQuery, null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //delete data tc_bae
+    public Cursor del_tc_bae(String dsetup01, String dsetup02, String dsetup03) {
+        try {
+            String selectQuery = "SELECT setup01,setup02,setup03 FROM setup_data_file WHERE setup01='" + dsetup01 + "' " +
+                    "AND setup02='" + dsetup02 + "' AND setup03='" + dsetup03 + "' ORDER BY 1";
+            return db.rawQuery(selectQuery, null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //delete setup_data_file
+    public void del_setup_data_file(String qry_xuong, String qry_khu, String qry_vitri) {
+        String whereClause_hm0102 = "setup01=? AND setup02=? AND setup03=?";
+        String[] strings = new String[]{qry_xuong, qry_khu, qry_vitri};
+        db.delete(TB_setup_data_file, whereClause_hm0102, strings);
+    }
+
     public Cursor getAll_sdata_01(String l_quycach) {
         Cursor a;
         try {
@@ -354,29 +471,26 @@ public class Create_Table {
         }
     }
 
-    public Cursor getAll_search_data(String l_vaont,String l_rant,String l_doncong,String l_quycach,String l_xuong) {
+
+    public Cursor getAll_search_data(String l_vaont, String l_rant, String l_doncong, String l_quycach, String l_xuong) {
         Cursor a;
         try {
             //SQLiteDatabase db = this.getWritableDatabase();
-            String str="";
-            if (!l_vaont.equals("") && !l_rant.equals(""))
-            {
-                str = str + " AND scan06 BETWEEN '" + l_vaont +"' AND '" + l_rant + "'  ";
+            String str = "";
+            if (!l_vaont.equals("") && !l_rant.equals("")) {
+                str = str + " AND scan06 BETWEEN '" + l_vaont + "' AND '" + l_rant + "'  ";
             }
-            if(!l_doncong.equals(""))
-            {
+            if (!l_doncong.equals("")) {
                 str = str + " AND sdata04 = '" + l_doncong + "' ";
             }
-            if(!l_quycach.equals(""))
-            {
+            if (!l_quycach.equals("")) {
                 str = str + " AND sdata06= '" + l_quycach + "' ";
             }
-            if(!l_xuong.equals(""))
-            {
+            if (!l_xuong.equals("")) {
                 str = str + " AND sdata01= '" + l_xuong + "' ";
             }
             String selectQuery = "SELECT distinct 0 _id, sdata04,sdata06,sdata05,sdata01,sdata02,sdata03 FROM total_sdata_file, scandata_file  " +
-                    " WHERE sdata01 = scan07 AND sdata04 = scan01 " ;
+                    " WHERE sdata01 = scan07 AND sdata04 = scan01 ";
             String sqlorder = " ORDER BY 1 ";
             selectQuery = selectQuery + str + sqlorder;
             return db.rawQuery(selectQuery, null);

@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NT_DSVT">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="8"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:orientation="vertical">
 
         <GridView
@@ -24,6 +25,80 @@
             android:scrollbars="none"
             android:stretchMode="columnWidth"
             android:verticalSpacing="16dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/nt_danhsach"
+            android:textStyle="bold"
+            android:theme="@style/title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="@string/tt_stt"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:text="@string/nt_scon"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:text="@string/sc_doncong"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center"
+                android:text="@string/sc_quycach"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/sc_soluong"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_dsdata1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -19,6 +19,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -59,7 +62,8 @@ public class OpenScaner extends AppCompatActivity {
     DecimalFormat decimalFormat;
     Create_Table create_table = null;
 
-    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_soluong, tv_qc;
+    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_qc;
+    EditText tv_soluong;
     Button btn_addQrcode, btn_DelQrcode;
     String IDButton, g_xuong, g_server, SaveCode;
     String g_khu, g_vitri;
@@ -82,6 +86,8 @@ public class OpenScaner extends AppCompatActivity {
         l_vtri = getBundle.getString("VITRI");
         createTable = new Create_Table(this);
         createTable.open();
+        create_table = new Create_Table(this);
+        create_table.open();
 
 
         /*g_xuong = getBundle.getString("xuong");
@@ -91,7 +97,7 @@ public class OpenScaner extends AppCompatActivity {
         g_server = "PHPtest";
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("廠別： " + conf_xuong + "  儲位:  " + conf_khu + "  子位置:  " + l_vtri);
+        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu + "  Vị trí con:  " + l_vtri);
 
         Locale locales = new Locale("en", "EN");
         decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locales);
@@ -99,9 +105,6 @@ public class OpenScaner extends AppCompatActivity {
 
         CameraSetting();
         firstDetected = true;
-
-        create_table = new Create_Table(this);
-        create_table.open();
 
         //loadData();
 
@@ -112,8 +115,8 @@ public class OpenScaner extends AppCompatActivity {
 
         tv_qrcode = findViewById(R.id.tv_qrcode);
         tv_ngayvao = findViewById(R.id.tv_ngayvao);
-        //tv_ngaysac = findViewById(R.id.tv_ngaysac);
-        //tv_tuan = findViewById(R.id.tv_tuan);
+        tv_ngaysac = findViewById(R.id.tv_ngaysac);
+        tv_tuan = findViewById(R.id.tv_tuan);
         tv_soluong = findViewById(R.id.tv_soluong);
         tv_qc = findViewById(R.id.tv_qc);
         btn_addQrcode = findViewById(R.id.btn_addQrcode);
@@ -124,46 +127,105 @@ public class OpenScaner extends AppCompatActivity {
             String res = "";
             String res1 = "";
             String res2 = "";
+
+            LocalTime now = LocalTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmss");
+            String formattedTime = now.format(formatter);
+            System.out.println(formattedTime);
+
             //if (!SaveCode.equals("")) {
             if (tv_qrcode.getText().toString().length() > 0) {
                 //
                 if (Integer.parseInt(tv_soluong.getText().toString()) > 0) {
-                    //Kiểm tra trong table tổng đã có dữ liệu hay chưa
-                    Integer count1 = check_total(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
+                    if (g_INOUT.equals("IN")) {
+                        Integer c_sum = sum_total(conf_xuong, conf_khu, l_vtri);
+                        //Integer c_hco = c_standard(conf_xuong, conf_khu, l_vtri);
+                        Integer c_tong = c_sum + Integer.parseInt(tv_soluong.getText().toString());
+                        //Kiểm tra số lượng có vượt quá khả năng hay không
+                        //if (c_tong <= c_hco) {
+                            //Kiểm tra trong table tổng đã có dữ liệu hay chưa
+                            Integer count1 = check_total(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
 
-                    if (count1 > 0) {
-                        //update dữ liệu vào table tổng
-                         create_table.upd_total_sdata(conf_xuong, conf_khu,
-                                l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""),g_INOUT);
+                            if (count1 > 0) {
+                                //update dữ liệu vào table tổng
+                                create_table.upd_total_sdata(conf_xuong, conf_khu,
+                                        l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""), g_INOUT);
+                            } else {
+                                //insert dữ liệu vào table tổng
+                                res1 = create_table.insTotal_sdata(conf_xuong, conf_khu,
+                                        l_vtri, tv_qrcode.getText().toString().trim(),
+                                        tv_soluong.getText().toString().trim().replace(",", ""),
+                                        tv_qc.getText().toString().trim());
+                                if (res1.equals("TRUE")) {
+
+                                } else {
+                                    Toast.makeText(this, "更新到insSetup_data失敗 Cập nhật insSetup_data thất bại", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            //Insert dữ liệu lưu vào table lịch sử quét
+                            String str = conf_xuong.concat("/").concat(conf_khu).concat("/").concat(l_vtri).
+                                    concat("/").concat(g_INOUT).concat("/").concat(tv_ngayvao.getText().toString().trim())
+                                    .concat("/").concat(formattedTime).concat("/").concat(tv_qrcode.getText().toString().trim());
+                            res = create_table.insScanData(str,
+                                    tv_qrcode.getText().toString().trim(),
+                                    tv_qc.getText().toString().trim(),
+                                    tv_soluong.getText().toString().trim().replace(",", ""),
+                                    tv_tuan.getText().toString().trim(),
+                                    tv_ngaysac.getText().toString().trim(),
+                                    tv_ngayvao.getText().toString().trim(),
+
+                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim());
+
+                            //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
+
+                            if (res.equals("TRUE")) {
+                                Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
+                                clear_map();
+                            } else {
+                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        /*} else {
+                            //Toast.makeText(this, "數量太多超過可以存的數量 Số lượng vượt quá giới hạn có thể lưu trữ: %s", c_hco, Toast.LENGTH_SHORT).show();
+                            String message = String.format("數量超過可以存的數量 Số lượng vượt quá giới hạn có thể lưu trữ: %s", c_hco);
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                        }*/
                     } else {
-                        //insert dữ liệu vào table tổng
-                        res1 = create_table.insTotal_sdata(conf_xuong, conf_khu,
-                                l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""),tv_qc.getText().toString().trim());
-                        if (res1.equals("TRUE")) {
-                            firstDetected = true;
+                        Integer c_sum = sum_total1(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
+                        if (Integer.parseInt(tv_soluong.getText().toString()) > c_sum) {
+                            String message = String.format("輸入數量超過庫存量 Số lượng vượt quá lượng tồn kho: %s", c_sum);
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(this, "更新到insSetup_data失敗 Cập nhật insSetup_data thất bại", Toast.LENGTH_SHORT).show();
+                            //update dữ liệu vào table tổng
+                            create_table.upd_total_sdata(conf_xuong, conf_khu,
+                                    l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""), g_INOUT);
+
+                            //Insert dữ liệu lưu vào table lịch sử quét
+                            String str = conf_xuong.concat("/").concat(conf_khu).concat("/").concat(l_vtri).
+                                    concat("/").concat(g_INOUT).concat("/").concat(tv_ngayvao.getText().toString().trim())
+                                    .concat("/").concat(formattedTime).concat("/").concat(tv_qrcode.getText().toString().trim());
+
+                            res = create_table.insScanData(str,
+                                    tv_qrcode.getText().toString().trim(),
+                                    tv_qc.getText().toString().trim(),
+                                    tv_soluong.getText().toString().trim().replace(",", ""),
+                                    tv_tuan.getText().toString().trim(),
+                                    tv_ngaysac.getText().toString().trim(),
+                                    tv_ngayvao.getText().toString().trim(),
+
+                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID,
+                                    tv_ngayvao.getText().toString().trim());
+
+                            //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
+
+                            if (res.equals("TRUE")) {
+                                Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
+                                clear_map();
+                            } else {
+                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                    //Insert dữ liệu lưu vào table lịch sử quét
-                    res = create_table.insScanData(
-                            tv_qrcode.getText().toString().trim(),
-                            tv_qc.getText().toString().trim(),
-                            tv_soluong.getText().toString().trim().replace(",", ""),
-                            //tv_tuan.getText().toString().trim(),
-                            //tv_ngaysac.getText().toString().trim(),
-                            tv_ngayvao.getText().toString().trim(),
 
-                            conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim());
 
-                    //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
-
-                    if (res.equals("TRUE")) {
-                        Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
-                        clear_map();
-                        firstDetected = true;
-                    } else {
-                        Toast.makeText(this, "存放失敗 Lưu trữ thất bại", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(this, "數量不能是 0 Số lượng không thể là 0", Toast.LENGTH_SHORT).show();
@@ -188,13 +250,45 @@ public class OpenScaner extends AppCompatActivity {
         return n_count;
     }
 
+    //Tìm số lượng
+    private int sum_total(String tt_xuong, String tt_khu, String tt_vitri) {
+        cursor_1 = createTable.getAll_check_total_sdata(tt_xuong, tt_khu, tt_vitri);
+        if (cursor_1 != null && cursor_1.moveToFirst()) {
+            int n_count2 = cursor_1.getInt(0);
+            cursor_1.close(); // đóng Cursor sau khi sử dụng xong
+            return n_count2;
+        } else {
+            return 0;
+        }
+    }
+
+    //Tìm số lượng
+    private int sum_total1(String tt_xuong, String tt_khu, String tt_vitri, String tt_doncong) {
+        cursor_1 = createTable.getAll_check_total_sdata2(tt_xuong, tt_khu, tt_vitri, tt_doncong);
+        if (cursor_1 != null && cursor_1.moveToFirst()) {
+            int n_count2 = cursor_1.getInt(0);
+            cursor_1.close(); // đóng Cursor sau khi sử dụng xong
+            return n_count2;
+        } else {
+            return 0;
+        }
+    }
+
+    //Số lượng tiêu chuẩn
+   /* private int c_standard(String tt_xuong, String tt_khu, String tt_vitri) {
+        cursor_1 = createTable.getAll_standard(tt_xuong, tt_khu, tt_vitri);
+        cursor_1.moveToFirst();
+        int n_count3 = cursor_1.getInt(0);
+        return n_count3;
+    }*/
+
     private void clear_map() {
         SaveCode = "";
         tv_qrcode.setText("");
         tv_ngayvao.setText("");
-        //tv_ngaysac.setText("");
-        //tv_tuan.setText("");
-        tv_soluong.setText("");
+        tv_ngaysac.setText("");
+        tv_tuan.setText("");
+        tv_soluong.setText("0");
         tv_qc.setText("");
         firstDetected = true;
     }
@@ -208,8 +302,8 @@ public class OpenScaner extends AppCompatActivity {
                 @SuppressLint("Range") String scan01 = cursor.getString(cursor.getColumnIndex("scan01"));
                 @SuppressLint("Range") String scan02 = cursor.getString(cursor.getColumnIndex("scan02"));
                 @SuppressLint("Range") String scan03 = cursor.getString(cursor.getColumnIndex("scan03"));
-                //@SuppressLint("Range") String scan04 = cursor.getString(cursor.getColumnIndex("scan04"));
-                //@SuppressLint("Range") String scan05 = cursor.getString(cursor.getColumnIndex("scan05"));
+                @SuppressLint("Range") String scan04 = cursor.getString(cursor.getColumnIndex("scan04"));
+                @SuppressLint("Range") String scan05 = cursor.getString(cursor.getColumnIndex("scan05"));
                 @SuppressLint("Range") String scan06 = cursor.getString(cursor.getColumnIndex("scan06"));
                 /*@SuppressLint("Range") String scan07 = cursor.getString(cursor.getColumnIndex("scan07"));
                 @SuppressLint("Range") String scan08 = cursor.getString(cursor.getColumnIndex("scan08"));
@@ -222,8 +316,8 @@ public class OpenScaner extends AppCompatActivity {
                 tv_qrcode.setText(scan01);
                 tv_qc.setText(scan02);
                 tv_soluong.setText(scan03);
-                //tv_tuan.setText(scan04);
-                //tv_ngaysac.setText(scan05);
+                tv_tuan.setText(scan04);
+                tv_ngaysac.setText(scan05);
                 tv_ngayvao.setText(scan06);
                 //SaveCode = scanqrcode;
             }
@@ -231,30 +325,36 @@ public class OpenScaner extends AppCompatActivity {
             SaveCode = "";
             tv_qrcode.setText("");
             tv_ngayvao.setText("");
-            //tv_ngaysac.setText("");
-            //tv_tuan.setText("");
+            tv_ngaysac.setText("");
+            tv_tuan.setText("");
             tv_soluong.setText("");
             tv_qc.setText("");
         }
     }
 
     private void getcode(String g_code) {
-        if (g_code.length() > 0) {
+        if (g_code.length() >= 16) {
             String g_doncong = g_code.substring(0, 16).trim();
-            final String res = getcodedata("http://172.16.40.20/" + g_server + "/TechAPP/getDataPallet.php?item=" + g_doncong);
+            final String res = getcodedata("http://172.16.40.20/" + g_server + "/WMS/getDataPallet.php?item=" + g_doncong);
             if (res.length() > 0 && !res.equals("FALSE")) {
-                //[{"SFB01":"BC51A-2112000001","IMAUD04":"WTZ6VIS(COS)","SFB08":"15000","TA_SFB010":"2021048"}
+                //[{"SFB01":"BC51A-2112000001","IMAUD04":"WTZ6VIS(COS)","TC_OXA011":"15000","TA_SFB010":"2021048"}
+                String substr1 = g_doncong.substring(6, 10);
+                String nt = String.valueOf(20);
+                nt = nt.concat(substr1);
                 try {
                     JSONArray jsonArray = new JSONArray(res);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     tv_qrcode.setText(g_doncong);
                     tv_qc.setText(jsonObject.getString("IMAUD04").toString().trim());
-                    int g_sfb08 = Integer.parseInt(jsonObject.getString("SFB08"));
-                    //tv_soluong.setText(String.valueOf(decimalFormat.format(g_sfb08)));
-                    tv_soluong.setText(String.valueOf(decimalFormat.format(0)));
-                    //tv_tuan.setText(jsonObject.getString("TA_SFB010").toString().trim());
-                    //tv_ngaysac.setText(dateFormat.format(new Date()).toString());
+                    //int g_sfb08 = Integer.parseInt(jsonObject.getString("TC_BAF003"));
+                    tv_tuan.setText(jsonObject.getString("TA_SFB010").toString().trim());
+                    tv_ngaysac.setText(nt.toString().trim());
                     tv_ngayvao.setText(dateFormat.format(new Date()).toString());
+                    //tv_soluong.setText("0");
+                    tv_soluong.setText(jsonObject.getString("TC_BAF003").toString().trim());
+                    //tv_ngaysac.setText(jsonObject.getString(nt).toString().trim());
+
+
                     SaveCode = g_code;
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -265,8 +365,8 @@ public class OpenScaner extends AppCompatActivity {
                 tv_qrcode.setText(g_code.substring(0, 16));
                 tv_qc.setText("WTZ5S(COS)");
                 tv_soluong.setText("15,000");
-                //tv_tuan.setText("2023010");
-                //tv_ngaysac.setText(dateFormat.format(new Date()).toString());
+                tv_tuan.setText("2023010");
+                tv_ngaysac.setText(dateFormat.format(new Date()).toString());
                 tv_ngayvao.setText(dateFormat.format(new Date()).toString());
                 SaveCode = g_code;
             }
@@ -341,6 +441,7 @@ public class OpenScaner extends AppCompatActivity {
                 if (qrCodes.size() != 0 && firstDetected) {
                     firstDetected = false;
                     final String g_code = qrCodes.valueAt(0).displayValue;
+
                     getcode(g_code);
                 }
             }

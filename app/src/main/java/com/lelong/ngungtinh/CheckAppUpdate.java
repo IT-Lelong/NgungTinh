@@ -42,7 +42,7 @@ public class CheckAppUpdate {
     String newVerName = "";//新版本名稱
     int newVerCode = -1;//新版本號
     ProgressDialog pd = null;
-    String g_name = "NGUNGTINH_APP";
+    String g_name = "WMS";
     String UPDATE_SERVERAPK =  g_name + ".apk";
     String g_package = "";
 

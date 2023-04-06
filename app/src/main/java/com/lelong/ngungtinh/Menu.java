@@ -3,8 +3,10 @@ package com.lelong.ngungtinh;
 import static java.security.AccessController.getContext;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -19,13 +21,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.lelong.ngungtinh.KTnew.nt_dialog1;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
@@ -48,6 +59,9 @@ public class Menu extends AppCompatActivity {
     String[] station = new String[0];
     ArrayAdapter<String> stationlist;
     String v_id;
+    JSONArray tjsonupload,jsonupload;
+    JSONObject ujobject;
+    private Create_Table db = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,131 +257,152 @@ public class Menu extends AppCompatActivity {
                     break;
                 }
 
-                case R.id.btn_NT05: {
-                    Intent QR010 = new Intent();
-                    QR010.setClass(Menu.this, NT_Setup_data.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("ID", ID);
-                    bundle.putString("SERVER", g_server);
-                    QR010.putExtras(bundle);
-                    startActivity(QR010);
+                case R.id.btn_NT04: {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Menu.this);
+                    builder.setMessage(Menu.this.getString(R.string.M05))
+                            .setPositiveButton(Menu.this.getString(R.string.btn_ok), null)
+                            .setNegativeButton(Menu.this.getString(R.string.btn_cancel), null);
+
+
+                    AlertDialog al_dialog = builder.create();
+                    al_dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            TextView messageView = ((AlertDialog) dialogInterface).findViewById(android.R.id.message);
+                            messageView.setTextSize(30);
+
+                            Button positiveButton = ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE);
+                            positiveButton.setTextColor(ContextCompat.getColor(Menu.this, R.color.blue));
+                            positiveButton.setTextSize(15);
+                            Button negativeButton = ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_NEGATIVE);
+                            negativeButton.setTextColor(ContextCompat.getColor(Menu.this, R.color.red));
+                            negativeButton.setTextSize(15);
+
+                            positiveButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    db = new Create_Table(Menu.this);
+                                    db.open();
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String bien = "A";
+                                            Cursor upl = db.getAll_tc_bac(bien);
+                                            //Cursor tupl = db.getAll_tc_bad(bien);
+                                            if (upl.getCount() > 0) {
+
+                                                jsonupload = cur2Json(upl);
+                                                //tjsonupload = cur2Json(tupl);
+
+                                                try {
+                                                    ujobject = new JSONObject();
+                                                    ujobject.put("ujson", jsonupload);
+                                                    //ujobject.put("tjson", tjsonupload);
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload.php");
+
+                                                runOnUiThread(new Runnable() { //Vì Toast không thể chạy đc nếu không phải UI Thread nên sử dụng runOnUIThread.
+                                                    @Override
+                                                    public void run() {
+                                                        if (res.contains("false")) {
+                                                            //Toast.makeText(getApplicationContext(), getString(R.string.M09), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            //Toast.makeText(getApplicationContext(), getString(R.string.M08), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thành công ", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    }).start();
+
+
+                                }
+                            });
+                        }
+                    });
+
+                    al_dialog.show();
                     break;
                 }
 
-
-
-
-                /*case R.id.btn_KT04: {
-                    Intent QR010 = new Intent();
-                    QR010.setClass(Menu.this, KT_1.class);
+                case R.id.btn_NT05: {
+                    Intent NT05 = new Intent();
+                    NT05.setClass(Menu.this, NT_Setup_data.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("ID", ID);
                     bundle.putString("SERVER", g_server);
-                    QR010.putExtras(bundle);
-                    startActivity(QR010);
+                    NT05.putExtras(bundle);
+                    startActivity(NT05);
                     break;
-                }*/
+                }
 
 
             }
         }
     };
 
-    //Khởi tạo menu trên thanh tiêu đề (S)
-    /*@Override
-    public boolean onCreateOptionsMenu(@NonNull android.view.Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_opt, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.refresh_datatable:
-                //Cre_db.delete_table();
-                //Refresh_Datatable();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void Refresh_Datatable() {
-        Thread api = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String res_fab = get_DataTable("http://172.16.40.20/PHPtest/TechAPP/getDataTable.php?item=fab");
-                if (!res_fab.equals("FALSE")) {
-                    try {
-                        JSONArray jsonarray = new JSONArray(res_fab);
-                        for (int i = 0; i < jsonarray.length(); i++) {
-                            JSONObject jsonObject = jsonarray.getJSONObject(i);
-                            String g_tc_fab001 = jsonObject.getString("TC_FAB001"); //Mã báo biểu
-                            String g_tc_fab002 = jsonObject.getString("TC_FAB002"); //Mã hạng mục
-                            String g_tc_fab003 = jsonObject.getString("TC_FAB003"); //Tên hạng mục( tiếng hoa)
-                            String g_tc_fab004 = jsonObject.getString("TC_FAB004"); //Tên hạng mục( tiếng việt)
-
-                            Cre_db.append(g_tc_fab001, g_tc_fab002, g_tc_fab003, g_tc_fab004);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    String res_fac = get_DataTable("http://172.16.40.20/PHPtest/TechAPP/getDataTable.php?item=fac");
-                    if (!res_fac.equals("FALSE")) {
-                        try {
-                            JSONArray jsonarray = new JSONArray(res_fac);
-                            for (int i = 0; i < jsonarray.length(); i++) {
-                                JSONObject jsonObject = jsonarray.getJSONObject(i);
-                                String g_tc_fac001 = jsonObject.getString("TC_FAC001"); //Mã hạng mục
-                                String g_tc_fac002 = jsonObject.getString("TC_FAC002"); //Mã báo biểu
-                                String g_tc_fac003 = jsonObject.getString("TC_FAC003"); //Mã hạng mục chi tiết
-                                String g_tc_fac004 = jsonObject.getString("TC_FAC004"); //Mã tổng
-                                String g_tc_fac005 = jsonObject.getString("TC_FAC005"); //Tên hạng mục chi tiết( tiếng hoa)
-                                String g_tc_fac006 = jsonObject.getString("TC_FAC006"); //Tên hạng mục chi tiết( tiếng việt)
-                                String g_tc_fac007 = jsonObject.getString("TC_FAC007"); //Điểm số
-                                String g_tc_fac008 = jsonObject.getString("TC_FAC008"); //Hãng sản xuất
-                                String g_tc_fac011 = jsonObject.getString("TC_FAC011"); //Dãy đo thiết bị
-
-                                Cre_db.append(g_tc_fac001, g_tc_fac002, g_tc_fac003,
-                                        g_tc_fac004, g_tc_fac005, g_tc_fac006,
-                                        g_tc_fac007, g_tc_fac008, g_tc_fac011);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        });
-        api.start();
-    }
-
-    private String get_DataTable(String s) {
+    public String upload_all(String apiUrl) {
+        HttpURLConnection conn = null;
         try {
-            HttpURLConnection conn = null;
-            URL url = new URL(s);
+            URL url = new URL(apiUrl);
             conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestMethod("POST");
             conn.setConnectTimeout(999999);
             conn.setReadTimeout(999999);
             conn.setDoInput(true); //允許輸入流，即允許下載
             conn.setDoOutput(true); //允許輸出流，即允許上傳
-            conn.connect();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String jsonstring = reader.readLine();
+
+            OutputStream os = conn.getOutputStream();
+            DataOutputStream writer = new DataOutputStream(os);
+            writer.write(ujobject.toString().getBytes("UTF-8"));
+            writer.flush();
+            writer.close();
+            os.close();
+            InputStream is = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String result = reader.readLine();
             reader.close();
-            if (!jsonstring.equals("FALSE")) {
-                return jsonstring;
-            } else {
-                return "FALSE";
+            return result;
+        } catch (Exception ex) {
+            return "false";
+        } finally {
+            if (conn != null) {
+
+                conn.disconnect();
+
             }
-        } catch (Exception e) {
-            return "FALSE";
         }
-    }*/
-    //Khởi tạo menu trên thanh tiêu đề (E)
+    }
+
+    public JSONArray cur2Json(Cursor cursor) {
+        JSONArray resultSet = new JSONArray();
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            int totalColumn = cursor.getColumnCount();
+            JSONObject rowObject = new JSONObject();
+            for (int i = 0; i < totalColumn; i++) {
+                if (cursor.getColumnName(i) != null) {
+                    try {
+                        rowObject.put(cursor.getColumnName(i),
+                                cursor.getString(i));
+                    } catch (Exception e) {
+                    }
+                }
+            }
+            resultSet.put(rowObject);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return resultSet;
+    }
 
     private void setLanguage() {
         SharedPreferences preferences = getSharedPreferences("Language", Context.MODE_PRIVATE);

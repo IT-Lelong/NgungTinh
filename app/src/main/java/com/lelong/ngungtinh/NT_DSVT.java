@@ -1,23 +1,26 @@
 package com.lelong.ngungtinh;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NT_DSVT extends AppCompatActivity {
-    String ID, g_INOUT, conf_xuong, conf_khu,l_khu;
+public class NT_DSVT extends AppCompatActivity implements ntds_interface {
+    String ID, g_INOUT, conf_xuong, conf_khu, l_khu;
     Cursor cursor_1, cursor_2;
     private Create_Table createTable = null;
     String[] station = new String[0];
+    ListView lv_dsdata1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +32,13 @@ public class NT_DSVT extends AppCompatActivity {
         g_INOUT = getbundle.getString("INOUT");
         conf_xuong = getbundle.getString("XUONG");
         conf_khu = getbundle.getString("KHU");
+        lv_dsdata1 = findViewById(R.id.lv_dsdata1);
 
         GridView gridView = findViewById(R.id.gridView_DS);
         List<String> data = new ArrayList<>();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu);
 
         createTable = new Create_Table(this);
         createTable.open();
@@ -57,11 +64,10 @@ public class NT_DSVT extends AppCompatActivity {
         }
 
 
-
-        GridView_Adapter adapter = new GridView_Adapter(this, data);
+        GridView_Adapter adapter = new GridView_Adapter(this, data, ID, g_INOUT, conf_xuong, conf_khu, lv_dsdata1, this);
         gridView.setAdapter(adapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 cursor_1.moveToPosition(i);
@@ -78,6 +84,36 @@ public class NT_DSVT extends AppCompatActivity {
                 SCAN.putExtras(bundle);
                 startActivity(SCAN);
             }
+        });*/
+    }
+
+    private void load_data1(String conf_xuong, String conf_khu, String l_vtri) {
+
+        Cursor cursor = createTable.getAll_ntds_data(conf_xuong, conf_khu, l_vtri);
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
+                R.layout.activity_nt_dsvt_row, cursor,
+                new String[]{"_id", "sdata03", "sdata04", "sdata06", "sdata05"},
+                new int[]{R.id.ntds_stt, R.id.ntds_vitri, R.id.ntds_doncong, R.id.ntds_quycach, R.id.ntds_sl},
+                SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+
+        simpleCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                if (view.getId() == R.id.ntds_stt) {
+                    int rowNumber = cursor.getPosition() + 1;
+                    ((TextView) view).setText(String.valueOf(rowNumber));
+                    return true;
+                }
+                return false;
+            }
         });
+
+        lv_dsdata1.setAdapter(simpleCursorAdapter);
+
+    }
+
+    @Override
+    public void loadData1(String conf_xuong, String conf_khu, String l_vtri) {
+        load_data1(conf_xuong, conf_khu, l_vtri);
     }
 }

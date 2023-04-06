@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NgungTinh</string>
+    <string name="app_name">WMS</string>
 
     <string name="btn_ok">確定</string>
     <string name="btn_cancel">取消</string>
@@ -17,7 +17,7 @@
     <string name="btn_nt01">掃描入庫 </string>
     <string name="btn_nt02">掃描出庫</string>
     <string name="btn_nt03">查詢</string>
-    <string name="btn_nt04">清單</string>
+    <string name="btn_nt04">拋轉</string>
     <string name="btn_nt05">設立基本資料</string>
 
 
@@ -54,6 +54,7 @@
     <string name="nt_sxuong">廠別</string>
     <string name="nt_skhu">儲位</string>
     <string name="nt_scon">子位置</string>
+    <string name="nt_ssl">數量</string>
     <string name="btn_sinsert">新增</string>
     <string name="nt_danhsach">清單</string>
 
@@ -62,10 +63,14 @@
     <string name="sc_doncong">工單編號</string>
     <string name="sc_quycach">規格</string>
     <string name="sc_soluong">數量</string>
+    <string name="sc_tuan">APS排程週別</string>
+    <string name="sc_datesx">生產日期</string>
     <string name="sc_ngaysac">進靜置區日期</string>
     <string name="btsc_insert">存放</string>
     <string name="btsc_delete">清除</string>
 
     <string name="tt_stt">序號</string>
+    <string name="btn_search">查詢</string>
+    <string name="M05">確定拋轉資料?</string>
 
 </resources>
