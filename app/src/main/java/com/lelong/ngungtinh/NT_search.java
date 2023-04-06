@@ -57,25 +57,27 @@ public class NT_search extends AppCompatActivity {
         createTable = new Create_Table(this);
         createTable.open();
         check_plant();
-        if (cbx_qc != null && cbx_qc.getCount() > 0) {
-            cbx_qc.getSelectedItem().toString();
-            String s_quycach = cbx_qc.getSelectedItem().toString();
-            check_region(s_quycach);
-            cbx_qc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //cbx_qc.getSelectedItem().toString();
+        //String s_quycach = cbx_qc.getSelectedItem().toString();
+        //check_region(s_quycach);
+        cbx_qc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position >= 0)
+                {
                     cbx_qc.getSelectedItem().toString();
                     String s_quycach = cbx_qc.getSelectedItem().toString();
                     check_region(s_quycach);
                 }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                }
+            }
 
-            });
-        }
+        });
+
         edt_vaont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,6 +259,7 @@ public class NT_search extends AppCompatActivity {
         stationlist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cbx_qc.setAdapter(stationlist);
         cbx_qc.setSelection(stationlist.getCount());
+        //cursor_1.moveToNext();
     }
 
     private void check_region( String lquycach) {
@@ -298,6 +301,7 @@ public class NT_search extends AppCompatActivity {
         stationlist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cbx_x.setAdapter(stationlist);
         cbx_x.setSelection(stationlist.getCount());
+       // cursor_1.moveToNext();
     }
 
 
