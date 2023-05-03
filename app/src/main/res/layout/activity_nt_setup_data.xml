@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:text="STT"
+                android:text="@string/tt_stt"
                 android:textStyle="bold"
                 android:theme="@style/title" />
 
@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Xưởng"
+                android:text="@string/nt_sxuong"
                 android:textStyle="bold"
                 android:theme="@style/title" />
 
@@ -172,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Khu"
+                android:text="@string/nt_skhu"
                 android:textStyle="bold"
                 android:theme="@style/title" />
 
@@ -181,7 +181,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Vị trí"
+                android:text="@string/nt_scon"
                 android:textStyle="bold"
                 android:theme="@style/title" />
 <!--

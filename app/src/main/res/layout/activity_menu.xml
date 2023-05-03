@@ -93,6 +93,18 @@
                 android:enabled="true"
                 android:text="@string/btn_nt05"/>
         </TableRow>
+
+        <TableRow>
+            <Button
+                android:id="@+id/btn_NT06"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_type1"
+                android:theme="@style/btn_text_style"
+                android:enabled="true"
+                android:text="@string/btn_nt06"/>
+        </TableRow>
     </TableLayout>
 
 </LinearLayout>

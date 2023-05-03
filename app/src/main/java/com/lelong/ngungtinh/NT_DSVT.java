@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NT_DSVT extends AppCompatActivity implements ntds_interface {
-    String ID, g_INOUT, conf_xuong, conf_khu, l_khu;
+    String ID, g_INOUT, conf_xuong, conf_khu, l_khu, l_tt1;
     Cursor cursor_1, cursor_2;
     private Create_Table createTable = null;
     String[] station = new String[0];
     ListView lv_dsdata1;
+    String g_server = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +34,18 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
         conf_xuong = getbundle.getString("XUONG");
         conf_khu = getbundle.getString("KHU");
         lv_dsdata1 = findViewById(R.id.lv_dsdata1);
+        g_server = getbundle.getString("SERVER");
 
         GridView gridView = findViewById(R.id.gridView_DS);
         List<String> data = new ArrayList<>();
 
+        if (g_INOUT.equals("IN")) {
+            l_tt1 = "Quét nhập";
+        } else {
+            l_tt1 = "Quét xuất";
+        }
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu);
+        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu + "  Trạng thái:  " + l_tt1);
 
         createTable = new Create_Table(this);
         createTable.open();
@@ -52,6 +59,7 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
 
             try {
                 @SuppressLint("Range") String setup03 = cursor_1.getString(cursor_1.getColumnIndex("setup03"));
+                int number = Integer.parseInt(setup03);
                 String g_setup03 = setup03;
                 l_khu = g_setup03;
                 station[i] = g_setup03;
@@ -64,7 +72,7 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
         }
 
 
-        GridView_Adapter adapter = new GridView_Adapter(this, data, ID, g_INOUT, conf_xuong, conf_khu, lv_dsdata1, this);
+        GridView_Adapter adapter = new GridView_Adapter(this, data, ID, g_INOUT, conf_xuong, conf_khu, lv_dsdata1, this, g_server);
         gridView.setAdapter(adapter);
 
         /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -116,4 +124,5 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
     public void loadData1(String conf_xuong, String conf_khu, String l_vtri) {
         load_data1(conf_xuong, conf_khu, l_vtri);
     }
+
 }

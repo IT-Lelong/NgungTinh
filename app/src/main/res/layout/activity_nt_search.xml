@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical">
+        <!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -65,6 +66,7 @@
 
 
         </LinearLayout>
+        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -200,40 +202,15 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_weight="0.5"
                 android:gravity="center"
                 android:text="@string/tt_stt"
                 android:textStyle="bold"
                 android:theme="@style/title" />
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:gravity="center"
-                android:text="@string/sc_doncong"
-                android:textStyle="bold"
-                android:theme="@style/title" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:text="@string/sc_quycach"
-                android:textStyle="bold"
-                android:theme="@style/title" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:gravity="center"
-                android:text="@string/sc_soluong"
-                android:textStyle="bold"
-                android:theme="@style/title" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/nt_sxuong"
                 android:textStyle="bold"
@@ -242,7 +219,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/nt_skhu"
                 android:textStyle="bold"
@@ -251,9 +228,35 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/nt_scon"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/sc_doncong"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <!--
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="@string/sc_quycach"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+                -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/sc_soluong"
                 android:textStyle="bold"
                 android:theme="@style/title" />
         </LinearLayout>

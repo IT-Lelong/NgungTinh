@@ -6,6 +6,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -30,6 +33,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -45,6 +49,7 @@ public class NT_Setup_data extends AppCompatActivity {
     JSONArray djsonupload, jsonupload;
     JSONObject ujobject;
     String g_server = "";
+    String vitriStr = "";
     private Create_Table db = null;
 
     private Create_Table createTable = null;
@@ -75,23 +80,25 @@ public class NT_Setup_data extends AppCompatActivity {
                 String g_xuong = st_plant.getText().toString().trim();
                 String g_khu = st_region.getText().toString().trim();
                 String g_vitri = st_cpos.getText().toString().trim();
+
+                if (g_vitri.length() == 1){
+                    vitriStr = "0".concat(g_vitri);
+                } else {
+                    vitriStr = String.valueOf(g_vitri);
+                }
+
                 //String g_sl = st_sl.getText().toString().trim();
-                if (g_xuong.equals("") || g_khu.equals("") || g_vitri.equals("") /*|| g_sl.equals("")*/) {
+                if (g_xuong.equals("") || g_khu.equals("") || vitriStr.equals("") /*|| g_sl.equals("")*/) {
                     Toast.makeText(NT_Setup_data.this, "Cần phải nhập dữ liệu mới có thể thêm mới", Toast.LENGTH_SHORT).show();
                 } else {
-                    Integer dcount = check_count(g_xuong, g_khu, g_vitri);
+                    Integer dcount = check_count(g_xuong, g_khu, vitriStr);
                     if (dcount > 0) {
                         Toast.makeText(NT_Setup_data.this, "Dữ liệu đã tồn tại", Toast.LENGTH_SHORT).show();
-                        /*createTable.upd_setup_file(g_xuong,
-                                st_region.getText().toString().trim(),
-                                st_cpos.getText().toString().trim(),
-                                st_sl.getText().toString().trim());*/
-                        //load_data();
                     } else {
                         createTable.insSetup_data(g_xuong,
                                 st_region.getText().toString().trim(),
-                                st_cpos.getText().toString().trim());
-                        //load_data();
+                                //st_cpos.getText().toString().trim());
+                                vitriStr);
                     }
                     db = new Create_Table(NT_Setup_data.this);
                     db.open();
@@ -99,7 +106,7 @@ public class NT_Setup_data extends AppCompatActivity {
                         @Override
                         public void run() {
                             String bien = "A";
-                            Cursor upl = db.getAll_tc_bae(g_xuong, g_khu, g_vitri);
+                            Cursor upl = db.getAll_tc_bae(g_xuong, g_khu, vitriStr);
                             if (upl.getCount() > 0) {
 
                                 jsonupload = cur2Json(upl);
@@ -110,18 +117,18 @@ public class NT_Setup_data extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-                                final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload.php");
+                                final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload_4.php");
+                                //final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/uploadTest.php");
 
                                 runOnUiThread(new Runnable() { //Vì Toast không thể chạy đc nếu không phải UI Thread nên sử dụng runOnUIThread.
                                     @Override
                                     public void run() {
                                         if (res.contains("false")) {
                                             //Toast.makeText(getApplicationContext(), getString(R.string.M09), Toast.LENGTH_SHORT).show();
-                                            Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Thêm mới dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
                                         } else {
                                             //Toast.makeText(getApplicationContext(), getString(R.string.M08), Toast.LENGTH_SHORT).show();
-                                            Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thành công ", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Thêm mới dữ liệu thành công ", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -134,6 +141,8 @@ public class NT_Setup_data extends AppCompatActivity {
                 }
             }
         });
+        createTable.del_setup();
+        getcode_up();
         load_data();
     }
 
@@ -193,39 +202,39 @@ public class NT_Setup_data extends AppCompatActivity {
                         db = new Create_Table(NT_Setup_data.this);
                         db.open();
                         new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                        Cursor dupl = db.del_tc_bae(qry_xuong.getText().toString(), qry_khu.getText().toString(), qry_vitri.getText().toString());
-                        if (dupl.getCount() > 0) {
+                            @Override
+                            public void run() {
+                                Cursor dupl = db.del_tc_bae(qry_xuong.getText().toString(), qry_khu.getText().toString(), qry_vitri.getText().toString());
+                                if (dupl.getCount() > 0) {
 
-                            djsonupload = cur2Json(dupl);
+                                    djsonupload = cur2Json(dupl);
 
-                            try {
-                                ujobject = new JSONObject();
-                                ujobject.put("djson", djsonupload);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload.php");
-
-                            runOnUiThread(new Runnable() { //Vì Toast không thể chạy đc nếu không phải UI Thread nên sử dụng runOnUIThread.
-                                @Override
-                                public void run() {
-                                    if (res.contains("false")) {
-                                        //Toast.makeText(getApplicationContext(), getString(R.string.M09), Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(getApplicationContext(), "Xóa dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        //Toast.makeText(getApplicationContext(), getString(R.string.M08), Toast.LENGTH_SHORT).show();
-                                        createTable.del_setup_data_file(qry_xuong.getText().toString(), qry_khu.getText().toString(), qry_vitri.getText().toString());
-                                        Toast.makeText(getApplicationContext(), "Xóa dữ liệu thành công ", Toast.LENGTH_SHORT).show();
-                                        load_data();
+                                    try {
+                                        ujobject = new JSONObject();
+                                        ujobject.put("djson", djsonupload);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                }
-                            });
+                                    final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload_5.php");
+                                    //final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/uploadTest.php");
 
-                        }
-                        }
+                                    runOnUiThread(new Runnable() { //Vì Toast không thể chạy đc nếu không phải UI Thread nên sử dụng runOnUIThread.
+                                        @Override
+                                        public void run() {
+                                            if (res.contains("false")) {
+                                                //Toast.makeText(getApplicationContext(), getString(R.string.M09), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "Xóa dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                //Toast.makeText(getApplicationContext(), getString(R.string.M08), Toast.LENGTH_SHORT).show();
+                                                createTable.del_setup_data_file(qry_xuong.getText().toString(), qry_khu.getText().toString(), qry_vitri.getText().toString());
+                                                Toast.makeText(getApplicationContext(), "Xóa dữ liệu thành công ", Toast.LENGTH_SHORT).show();
+                                                load_data();
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
                         }).start();
                         return true;
                 }
@@ -292,4 +301,65 @@ public class NT_Setup_data extends AppCompatActivity {
         cursor.close();
         return resultSet;
     }
+
+    private void getcode_up() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                final String res = getcodedata("http://172.16.40.20/" + g_server + "/WMS/getDataSetup.php?item=setup");
+                if (!res.equals("FALSE")) {
+                    try {
+                        JSONArray jsonarray = new JSONArray(res);
+                        for (int i = 0; i < jsonarray.length(); i++) {
+                            JSONObject jsonObject = jsonarray.getJSONObject(i);
+                            String g_setup01 = jsonObject.getString("TC_BAE001"); //Xưởng
+                            String g_setup02 = jsonObject.getString("TC_BAE002"); //Khu
+                            String g_setup03 = jsonObject.getString("TC_BAE003"); //Vị trí con
+                            createTable.append_setup(g_setup01, g_setup02, g_setup03);
+                        }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            load_data();
+                        }
+                    });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Looper.loop();
+            }
+
+        }).start();
+
+    }
+
+
+    private String getcodedata(String s) {
+        try {
+            HttpURLConnection conn = null;
+            URL url = new URL(s);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(999999);
+            conn.setReadTimeout(999999);
+            conn.setDoInput(true); //允許輸入流，即允許下載
+            conn.setDoOutput(true); //允許輸出流，即允許上傳
+            conn.connect();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String jsonstring = reader.readLine();
+            reader.close();
+            if (!jsonstring.equals("FALSE")) {
+                return jsonstring;
+            } else {
+                return "FALSE";
+            }
+        } catch (Exception e) {
+            return "FALSE";
+        }
+    }
+
+
 }

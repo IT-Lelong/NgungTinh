@@ -45,7 +45,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
-public class OpenScaner extends AppCompatActivity {
+public class OpenScaner extends AppCompatActivity implements res_interface {
     SurfaceView surfaceView;
     CameraSource cameraSource;
     BarcodeDetector barcodeDetector;
@@ -55,6 +55,7 @@ public class OpenScaner extends AppCompatActivity {
     private Create_Table createTable = null;
     String[] station = new String[0];
     ArrayAdapter<String> stationlist;
+    private update_data Update_data = null;
 
     Locale locale;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -66,7 +67,8 @@ public class OpenScaner extends AppCompatActivity {
     EditText tv_soluong;
     Button btn_addQrcode, btn_DelQrcode;
     String IDButton, g_xuong, g_server, SaveCode;
-    String g_khu, g_vitri;
+    String g_khu, g_vitri,l_tt;
+
 
 
     @Override
@@ -84,6 +86,7 @@ public class OpenScaner extends AppCompatActivity {
         conf_xuong = getBundle.getString("XUONG");
         conf_khu = getBundle.getString("KHU");
         l_vtri = getBundle.getString("VITRI");
+        g_server = getBundle.getString("SERVER");
         createTable = new Create_Table(this);
         createTable.open();
         create_table = new Create_Table(this);
@@ -94,10 +97,16 @@ public class OpenScaner extends AppCompatActivity {
         g_server = getBundle.getString("SERVER");
         g_khu = IDButton.substring(0, 2);
         g_vitri = IDButton.substring(2, 4);*/
-        g_server = "PHPtest";
+        //g_server = "PHP";
+        //g_server = "PHPtest";
 
+        if (g_INOUT.equals("IN")){
+            l_tt = "Quét nhập";
+        }else{
+            l_tt = "Quét xuất";
+        }
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu + "  Vị trí con:  " + l_vtri);
+        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu + "  Vị trí con:  " + l_vtri+" Trạng thái: " + l_tt);
 
         Locale locales = new Locale("en", "EN");
         decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locales);
@@ -174,15 +183,18 @@ public class OpenScaner extends AppCompatActivity {
                                     tv_ngaysac.getText().toString().trim(),
                                     tv_ngayvao.getText().toString().trim(),
 
-                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim());
+                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim(),"");
 
                             //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
 
                             if (res.equals("TRUE")) {
-                                Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
-                                clear_map();
+                                Update_data = new update_data(this, g_server,str,this);
+                                Update_data.up_oracle();
+
+                                //Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
+                                //clear_map();
                             } else {
-                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
                             }
                         /*} else {
                             //Toast.makeText(this, "數量太多超過可以存的數量 Số lượng vượt quá giới hạn có thể lưu trữ: %s", c_hco, Toast.LENGTH_SHORT).show();
@@ -213,15 +225,17 @@ public class OpenScaner extends AppCompatActivity {
                                     tv_ngayvao.getText().toString().trim(),
 
                                     conf_xuong, conf_khu, l_vtri, g_INOUT, ID,
-                                    tv_ngayvao.getText().toString().trim());
+                                    tv_ngayvao.getText().toString().trim(),"");
 
                             //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
 
                             if (res.equals("TRUE")) {
-                                Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
-                                clear_map();
+                                Update_data = new update_data(this, g_server,str,this);
+                                Update_data.up_oracle();
+                                //Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
+                                //clear_map();
                             } else {
-                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -313,7 +327,7 @@ public class OpenScaner extends AppCompatActivity {
                 @SuppressLint("Range") String scan12 = cursor.getString(cursor.getColumnIndex("scan12"));*/
                 //@SuppressLint("Range") String scanqrcode = cursor.getString(cursor.getColumnIndex("scanqrcode"));
 
-                tv_qrcode.setText(scan01);
+               tv_qrcode.setText(scan01);
                 tv_qc.setText(scan02);
                 tv_soluong.setText(scan03);
                 tv_tuan.setText(scan04);
@@ -359,17 +373,10 @@ public class OpenScaner extends AppCompatActivity {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-
-
-            } else {
-                tv_qrcode.setText(g_code.substring(0, 16));
-                tv_qc.setText("WTZ5S(COS)");
-                tv_soluong.setText("15,000");
-                tv_tuan.setText("2023010");
-                tv_ngaysac.setText(dateFormat.format(new Date()).toString());
-                tv_ngayvao.setText(dateFormat.format(new Date()).toString());
-                SaveCode = g_code;
             }
+        }else{
+            g_code = null;
+            firstDetected = true;
         }
     }
 
@@ -500,5 +507,27 @@ public class OpenScaner extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         firstDetected = false;
+    }
+
+
+    @Override
+    public void loadData2(String l_res) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if (l_res.equals("TRUE")) {
+                    Toast.makeText(getApplicationContext(), "完成存放 Lưu trữ hoàn tất!", Toast.LENGTH_SHORT).show();
+                    clear_map();
+                }else{
+                    Toast.makeText(getApplicationContext(), "存放失敗 Lưu trữ thất bại! (2)", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        /*if (l_res.equals("TRUE")) {
+            Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "CHIM CÚT", Toast.LENGTH_SHORT).show();
+        }*/
+
     }
 }

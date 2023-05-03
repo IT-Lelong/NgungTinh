@@ -39,13 +39,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Menu extends AppCompatActivity {
 
     private Create_Table Cre_db = null;
     String g_server = "";
-    Button btn_NT01, btn_NT02, btn_NT03, btn_NT04, btn_NT05;
+    Button btn_NT01, btn_NT02, btn_NT03, btn_NT04, btn_NT05, btn_NT06;
     TextView menuID;
     String ID;
     Locale locale;
@@ -59,7 +61,7 @@ public class Menu extends AppCompatActivity {
     String[] station = new String[0];
     ArrayAdapter<String> stationlist;
     String v_id;
-    JSONArray tjsonupload,jsonupload;
+    JSONArray tjsonupload, jsonupload;
     JSONObject ujobject;
     private Create_Table db = null;
 
@@ -87,12 +89,15 @@ public class Menu extends AppCompatActivity {
         btn_NT03 = findViewById(R.id.btn_NT03);
         btn_NT04 = findViewById(R.id.btn_NT04);
         btn_NT05 = findViewById(R.id.btn_NT05);
+        btn_NT06 = findViewById(R.id.btn_NT06);
 
         btn_NT01.setOnClickListener(btnlistener);
         btn_NT02.setOnClickListener(btnlistener);
         btn_NT03.setOnClickListener(btnlistener);
         btn_NT04.setOnClickListener(btnlistener);
         btn_NT05.setOnClickListener(btnlistener);
+        btn_NT06.setOnClickListener(btnlistener);
+
 
     }
 
@@ -185,6 +190,7 @@ public class Menu extends AppCompatActivity {
                             bundle.putString("INOUT", INOUT);
                             bundle.putString("XUONG", conf_xuong);
                             bundle.putString("KHU", conf_khu);
+                            bundle.putString("SERVER", g_server);
                             DSVT.putExtras(bundle);
                             startActivity(DSVT);
                         }
@@ -236,6 +242,7 @@ public class Menu extends AppCompatActivity {
                             bundle.putString("INOUT", INOUT);
                             bundle.putString("XUONG", conf_xuong);
                             bundle.putString("KHU", conf_khu);
+                            bundle.putString("SERVER", g_server);
                             DSVT.putExtras(bundle);
                             startActivity(DSVT);
                         }
@@ -286,7 +293,7 @@ public class Menu extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            String bien = "A";
+                                            String bien = "N";
                                             Cursor upl = db.getAll_tc_bac(bien);
                                             //Cursor tupl = db.getAll_tc_bad(bien);
                                             if (upl.getCount() > 0) {
@@ -296,24 +303,36 @@ public class Menu extends AppCompatActivity {
 
                                                 try {
                                                     ujobject = new JSONObject();
-                                                    ujobject.put("ujson", jsonupload);
+                                                    ujobject.put("u2json", jsonupload);
                                                     //ujobject.put("tjson", tjsonupload);
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
 
-                                                final String res = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload.php");
+                                                final String res_1 = upload_all("http://172.16.40.20/" + g_server + "/WMS/upload.php");
 
                                                 runOnUiThread(new Runnable() { //Vì Toast không thể chạy đc nếu không phải UI Thread nên sử dụng runOnUIThread.
                                                     @Override
                                                     public void run() {
-                                                        if (res.contains("false")) {
-                                                            //Toast.makeText(getApplicationContext(), getString(R.string.M09), Toast.LENGTH_SHORT).show();
+                                                        if (res_1.contains("false")) {
                                                             Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
                                                         } else {
-                                                            //Toast.makeText(getApplicationContext(), getString(R.string.M08), Toast.LENGTH_SHORT).show();
-                                                            Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thành công ", Toast.LENGTH_SHORT).show();
+                                                            try {
+                                                                JSONObject jsonObject = new JSONObject(res_1);
+                                                                JSONArray jsonarray = jsonObject.getJSONArray("TC_BAC000");
+                                                                if (jsonarray.length() > 0) {
+                                                                    for (int i = 0; i < jsonarray.length(); i++) {
+                                                                        String g_key = jsonarray.getString(i);
+                                                                        db.upd_chk_scan(g_key, "Y");
+                                                                    }
+                                                                }
+                                                                Toast.makeText(getApplicationContext(), "Kết chuyển dữ liệu thành công ", Toast.LENGTH_SHORT).show();
+                                                                al_dialog.dismiss();
+                                                            } catch (JSONException e) {
+                                                                throw new RuntimeException(e);
+                                                            }
                                                         }
+
                                                     }
                                                 });
 
@@ -342,6 +361,16 @@ public class Menu extends AppCompatActivity {
                     break;
                 }
 
+                case R.id.btn_NT06: {
+                    Intent NT06 = new Intent();
+                    NT06.setClass(Menu.this, NT_search.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ID", ID);
+                    bundle.putString("SERVER", g_server);
+                    NT06.putExtras(bundle);
+                    startActivity(NT06);
+                    break;
+                }
 
             }
         }
