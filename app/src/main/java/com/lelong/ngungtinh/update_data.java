@@ -2,6 +2,7 @@ package com.lelong.ngungtinh;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,8 @@ public class update_data {
         g_package = mCtxAPI.getPackageName().toString();
         this.res_interface = res_interface;
     }
+
+
 
     public void up_oracle() {
         db = new Create_Table(this.mCtxAPI);

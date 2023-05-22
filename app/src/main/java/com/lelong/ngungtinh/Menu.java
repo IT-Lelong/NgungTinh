@@ -47,7 +47,7 @@ public class Menu extends AppCompatActivity {
 
     private Create_Table Cre_db = null;
     String g_server = "";
-    Button btn_NT01, btn_NT02, btn_NT03, btn_NT04, btn_NT05, btn_NT06;
+    Button btn_NT01, btn_NT02, btn_NT03, btn_NT04, btn_NT05;
     TextView menuID;
     String ID;
     Locale locale;
@@ -89,14 +89,13 @@ public class Menu extends AppCompatActivity {
         btn_NT03 = findViewById(R.id.btn_NT03);
         btn_NT04 = findViewById(R.id.btn_NT04);
         btn_NT05 = findViewById(R.id.btn_NT05);
-        btn_NT06 = findViewById(R.id.btn_NT06);
 
         btn_NT01.setOnClickListener(btnlistener);
         btn_NT02.setOnClickListener(btnlistener);
         btn_NT03.setOnClickListener(btnlistener);
         btn_NT04.setOnClickListener(btnlistener);
         btn_NT05.setOnClickListener(btnlistener);
-        btn_NT06.setOnClickListener(btnlistener);
+
 
 
     }
@@ -336,6 +335,14 @@ public class Menu extends AppCompatActivity {
                                                     }
                                                 });
 
+                                            }else{
+                                                runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        Toast.makeText(getApplicationContext(), "Không có dữ liệu để kết chuyển", Toast.LENGTH_SHORT).show();
+                                                        al_dialog.dismiss();
+                                                    }
+                                                });
+
                                             }
                                         }
                                     }).start();
@@ -358,17 +365,6 @@ public class Menu extends AppCompatActivity {
                     bundle.putString("SERVER", g_server);
                     NT05.putExtras(bundle);
                     startActivity(NT05);
-                    break;
-                }
-
-                case R.id.btn_NT06: {
-                    Intent NT06 = new Intent();
-                    NT06.setClass(Menu.this, NT_search.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("ID", ID);
-                    bundle.putString("SERVER", g_server);
-                    NT06.putExtras(bundle);
-                    startActivity(NT06);
                     break;
                 }
 

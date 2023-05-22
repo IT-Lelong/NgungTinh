@@ -178,9 +178,9 @@ public class NT_search extends AppCompatActivity {
                 Cursor cursor = createTable.getAll_search_data(g_dc, g_qc, g_xuong);
                 SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(NT_search.this,
                         R.layout.activity_nt_search_row, cursor,
-                        new String[]{"_id", "sdata01", "sdata02", "sdata03", "sdata04", "sdata06", "sdata05"},
+                        new String[]{"_id", "sdata01", "sdata02", "sdata03", "sdata04", "sdata06", "sdata05", "sdata07"},
                         //new int[]{R.id.tv_stt, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri},
-                        new int[]{R.id.tv_stt, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl},
+                        new int[]{R.id.tv_stt, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_date},
                         SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
                 simpleCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -200,6 +200,7 @@ public class NT_search extends AppCompatActivity {
                     Toast.makeText(NT_search.this, "沒有可用的查找數據 Không có dữ liệu tra cứu", Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
         //btn_Insert.setOnClickListener(new View.OnClickListener() {
         //@Override
@@ -370,7 +371,8 @@ public class NT_search extends AppCompatActivity {
                             String g_sdata04 = jsonObject.getString("TC_BAD004"); //Xưởng
                             String g_sdata05 = jsonObject.getString("TC_BAD005"); //Khu
                             String g_sdata06 = jsonObject.getString("TC_BAD006"); //Vị trí con
-                            createTable.append_total(g_sdata01, g_sdata02, g_sdata03, g_sdata04, g_sdata05, g_sdata06);
+                            String g_sdata07 = jsonObject.getString("NGAY"); //Ngày
+                            createTable.append_total(g_sdata01, g_sdata02, g_sdata03, g_sdata04, g_sdata05, g_sdata06, g_sdata07);
                         }
 
                         runOnUiThread(new Runnable() {

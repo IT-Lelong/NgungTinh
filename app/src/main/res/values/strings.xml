@@ -74,4 +74,7 @@
     <string name="btn_search">查詢</string>
     <string name="M05">確定拋轉資料?</string>
 
+    <string name="nt_post">出靜置區庫?</string>
+    <string name="nt_num">數量</string>
+
 </resources>

@@ -15,53 +15,42 @@
         android:textColor="@color/black"
         android:background="@drawable/border_listview"/>
 
-    <EditText
+    <TextView
         android:id="@+id/ntds_vitri"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.5"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:paddingLeft="5dp"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:gravity="center"
         android:background="@drawable/border_listview"/>
 
-    <EditText
+    <TextView
         android:id="@+id/ntds_doncong"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1.2"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:paddingLeft="5dp"
+
         android:textSize="18sp"
         android:textColor="@color/black"
         android:gravity="center"
         android:background="@drawable/border_listview"/>
 
-    <EditText
+    <TextView
         android:id="@+id/ntds_quycach"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1.3"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:paddingLeft="5dp"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:gravity="center"
         android:background="@drawable/border_listview"/>
 
-    <EditText
+    <TextView
         android:id="@+id/ntds_sl"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:paddingLeft="5dp"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:gravity="center"

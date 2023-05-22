@@ -55,26 +55,6 @@ public class nt_dialog1 extends AppCompatActivity {
         cbx_dkhu = findViewById(R.id.cbx_dkhu);
         btn_dconf = findViewById(R.id.btn_dconf);
 
-        /*cursor_1 = createTable.getAll_fia_02();
-        cursor_1.moveToFirst();
-        int num = cursor_1.getCount();
-        station = new String[num];
-        for (int i = 0; i < num; i++) {
-
-            try {
-                @SuppressLint("Range") String fiaud03 = cursor_1.getString(cursor_1.getColumnIndex("fiaud03"));
-
-                String g_fiaud03 = fiaud03;
-                station[i] = g_fiaud03;
-
-            } catch (Exception e) {
-                String err = e.toString();
-            }
-            stationlist = new ArrayAdapter<>(dialog.getContext(), android.R.layout.simple_spinner_item, station);
-            cbxsoxe.setAdapter(stationlist);
-            cbxsoxe.setSelection(0);
-            cursor_1.moveToNext();
-        }*/
 
 
     }

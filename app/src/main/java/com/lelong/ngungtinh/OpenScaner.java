@@ -164,7 +164,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                                 res1 = create_table.insTotal_sdata(conf_xuong, conf_khu,
                                         l_vtri, tv_qrcode.getText().toString().trim(),
                                         tv_soluong.getText().toString().trim().replace(",", ""),
-                                        tv_qc.getText().toString().trim());
+                                        tv_qc.getText().toString().trim(),"");
                                 if (res1.equals("TRUE")) {
 
                                 } else {
