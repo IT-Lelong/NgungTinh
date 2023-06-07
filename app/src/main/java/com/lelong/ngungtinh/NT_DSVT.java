@@ -99,8 +99,8 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
         Cursor cursor = createTable.getAll_ntds_data(conf_xuong, conf_khu, l_vtri);
         SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
                 R.layout.activity_nt_dsvt_row, cursor,
-                new String[]{"_id", "sdata03", "sdata04", "sdata06", "sdata05"},
-                new int[]{R.id.ntds_stt, R.id.ntds_vitri, R.id.ntds_doncong, R.id.ntds_quycach, R.id.ntds_sl},
+                new String[]{"_id", "sdata03", "sdata04", "sdata06","sdata08","sdata09","sdata05"},
+                new int[]{R.id.ntds_stt, R.id.ntds_vitri, R.id.ntds_doncong, R.id.ntds_quycach,R.id.ntds_mausac,R.id.ntds_diencuc, R.id.ntds_sl},
                 SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         simpleCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -136,6 +136,9 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                 TextView dsvt_doncong = view.findViewById(R.id.ntds_doncong);
                 TextView dsvt_qc = view.findViewById(R.id.ntds_quycach);
                 TextView dsvt_sl = view.findViewById(R.id.ntds_sl);
+                TextView dsvt_mausac = view.findViewById(R.id.ntds_mausac);
+                TextView dsvt_diencuc = view.findViewById(R.id.ntds_diencuc);
+
 
                 // Xử lý sự kiện khi người dùng chọn một lựa chọn trong menu
                 switch (item.getItemId()) {
@@ -145,6 +148,7 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                             nt_dialog2.setContentView(R.layout.nt_dialog2);
 
                             dg_soluong = nt_dialog2.findViewById(R.id.dg_soluong);
+                            dg_soluong.setText(dsvt_sl.getText());
                             btn_conf2 = nt_dialog2.findViewById(R.id.btn_conf2);
                             LocalTime now = LocalTime.now();
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmss");
@@ -158,6 +162,8 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                                     String l_vitri2 = dsvt_vitri.getText().toString().trim();
                                     String l_doncong2 = dsvt_doncong.getText().toString().trim();
                                     String l_quycach2 = dsvt_qc.getText().toString().trim();
+                                    String l_mausac  = dsvt_mausac.getText().toString().trim();
+                                    String l_diencuc = dsvt_diencuc.getText().toString().trim();
                                     Integer l_trave = sum_total2(l_xuong2, l_khu2, l_vitri2, l_doncong2);
                                     String res = "";
                                     //tv_ngayvao.setText(dateFormat1.format(new Date()).toString());
@@ -180,7 +186,7 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                                                 dg_soluong.getText().toString().replace(",", ""),
                                                 "",
                                                 s_date2,
-                                                ngay_vao, conf_xuong, conf_khu, l_vtri, g_INOUT, ID, ngay_vao, "");
+                                                ngay_vao, conf_xuong, conf_khu, l_vtri, g_INOUT, ID, ngay_vao,l_mausac,l_diencuc, "");
 
                                         if (res.equals("TRUE")) {
                                             res_interface resInterface = new res_interface() {

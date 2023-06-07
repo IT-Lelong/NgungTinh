@@ -63,7 +63,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
     DecimalFormat decimalFormat;
     Create_Table create_table = null;
 
-    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_qc;
+    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_qc,tv_dauccuc,tv_mausac;
     EditText tv_soluong;
     Button btn_addQrcode, btn_DelQrcode;
     String IDButton, g_xuong, g_server, SaveCode;
@@ -128,6 +128,8 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         tv_tuan = findViewById(R.id.tv_tuan);
         tv_soluong = findViewById(R.id.tv_soluong);
         tv_qc = findViewById(R.id.tv_qc);
+        tv_mausac = findViewById(R.id.tv_mausac);
+        tv_dauccuc = findViewById(R.id.tv_dauccuc);
         btn_addQrcode = findViewById(R.id.btn_addQrcode);
         btn_DelQrcode = findViewById(R.id.btn_DelQrcode);
 
@@ -164,7 +166,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                                 res1 = create_table.insTotal_sdata(conf_xuong, conf_khu,
                                         l_vtri, tv_qrcode.getText().toString().trim(),
                                         tv_soluong.getText().toString().trim().replace(",", ""),
-                                        tv_qc.getText().toString().trim(),"");
+                                        tv_qc.getText().toString().trim(),"",tv_mausac.getText().toString().trim(),tv_dauccuc.getText().toString().trim());
                                 if (res1.equals("TRUE")) {
 
                                 } else {
@@ -183,7 +185,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                                     tv_ngaysac.getText().toString().trim(),
                                     tv_ngayvao.getText().toString().trim(),
 
-                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim(),"");
+                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim(),tv_mausac.getText().toString().trim(),tv_dauccuc.getText().toString().trim(),"");
 
                             //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
 
@@ -225,7 +227,9 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                                     tv_ngayvao.getText().toString().trim(),
 
                                     conf_xuong, conf_khu, l_vtri, g_INOUT, ID,
-                                    tv_ngayvao.getText().toString().trim(),"");
+                                    tv_ngayvao.getText().toString().trim(),
+                                    tv_mausac.getText().toString().trim(),
+                                    tv_dauccuc.getText().toString().trim(),"");
 
                             //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
 
@@ -304,6 +308,8 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         tv_tuan.setText("");
         tv_soluong.setText("0");
         tv_qc.setText("");
+        tv_mausac.setText("");
+        tv_dauccuc.setText("");
         firstDetected = true;
     }
 
@@ -365,7 +371,10 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                     tv_ngaysac.setText(nt.toString().trim());
                     tv_ngayvao.setText(dateFormat.format(new Date()).toString());
                     //tv_soluong.setText("0");
+                    tv_dauccuc.setText(jsonObject.getString("l_diencuc").toString().trim());
+                    tv_mausac.setText(jsonObject.getString("l_mausac").toString().trim());
                     tv_soluong.setText(jsonObject.getString("TC_BAF003").toString().trim());
+
                     //tv_ngaysac.setText(jsonObject.getString(nt).toString().trim());
 
 

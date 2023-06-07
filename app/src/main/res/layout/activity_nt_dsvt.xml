@@ -70,7 +70,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.2"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/sc_doncong"
                 android:textStyle="bold"
@@ -82,6 +82,22 @@
                 android:layout_weight="1.3"
                 android:gravity="center"
                 android:text="@string/sc_quycach"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center"
+                android:text="@string/sc_mausac"
+                android:textStyle="bold"
+                android:theme="@style/title" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center"
+                android:text="@string/nt_daucuc"
                 android:textStyle="bold"
                 android:theme="@style/title" />
 

@@ -73,9 +73,9 @@
     <string name="tt_stt">STT</string>
     <string name="btn_search">Tra cứu</string>
     <string name="M05">Xác nhận kết chuyển dữ liệu?</string>
-
-    <string name="nt_post">Xuất kho ngưng tịnh</string>
-    <string name="nt_num">Số lượng</string>
+    //mausac,ngungtinh
+    <string name="sc_mausac">Màu sắc</string>
+    <string name="nt_daucuc">Đầu cực</string>
 
 
 

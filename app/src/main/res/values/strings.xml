@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Ngưng Tịnh</string>
 
     <string name="btn_ok">確定</string>
@@ -74,7 +74,10 @@
     <string name="btn_search">查詢</string>
     <string name="M05">確定拋轉資料?</string>
 
-    <string name="nt_post">出靜置區庫?</string>
-    <string name="nt_num">數量</string>
+    <string name="nt_post" tools:ignore="MissingTranslation">出靜置區庫?</string>
+    <string name="nt_num" tools:ignore="MissingTranslation">數量</string>
+    //mausac
+    <string name="sc_mausac">顏色</string>
+    <string name="nt_daucuc">極點</string>
 
 </resources>

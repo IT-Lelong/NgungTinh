@@ -29,7 +29,7 @@
         android:id="@+id/ntds_doncong"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1.2"
+        android:layout_weight="1.5"
 
         android:textSize="18sp"
         android:textColor="@color/black"
@@ -41,6 +41,24 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1.3"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:background="@drawable/border_listview"/>
+    <TextView
+        android:id="@+id/ntds_mausac"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:background="@drawable/border_listview"/>
+    <TextView
+        android:id="@+id/ntds_diencuc"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:gravity="center"

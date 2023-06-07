@@ -41,6 +41,7 @@ import java.util.List;
 
 public class NT_search extends AppCompatActivity {
     EditText /*edt_vaont,*/ edt_dc;
+    EditText edt_mausac,edt_daucuc;  // mausacdaucuc
     DatePickerDialog datePickerDialog;
     //EditText edt_rant;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -68,6 +69,9 @@ public class NT_search extends AppCompatActivity {
         cbx_x = findViewById(R.id.cbx_x);
         btn_Search = findViewById(R.id.btn_Search);
         lv_search = findViewById(R.id.lv_search);
+        //mausac,dauccuc
+        edt_mausac = findViewById(R.id.edt_mausac);
+        edt_daucuc = findViewById(R.id.edt_daucuc);
         //g_server = "PHP";
         //g_server = "PHPtest";
         createTable = new Create_Table(this);
@@ -157,8 +161,13 @@ public class NT_search extends AppCompatActivity {
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }*/
+                //mausac,daucuc
+                String g_mausac = edt_mausac.getText().toString().trim();
+                String g_daucuc =  edt_daucuc.getText().toString().trim();
+                //
                 String g_xuong = "";
                 String g_qc = "";
+
                 String g_dc = edt_dc.getText().toString().trim();
                 if (cbx_x.getSelectedItem() == null) {
                     g_xuong = "";
@@ -170,17 +179,18 @@ public class NT_search extends AppCompatActivity {
                 } else {
                     g_qc = cbx_qc.getSelectedItem().toString().trim();
                 }
+
                 /*if (!g_vaont.equals("") && g_rant.equals("")) {
                     g_rant = dateFormat.format(Calendar.getInstance().getTime());
                 } else if (g_vaont.equals("") && !g_rant.equals("")) {
                     g_vaont = g_rant;
                 }*/
-                Cursor cursor = createTable.getAll_search_data(g_dc, g_qc, g_xuong);
+                Cursor cursor = createTable.getAll_search_data(g_dc, g_qc, g_xuong,g_mausac,g_daucuc);
                 SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(NT_search.this,
                         R.layout.activity_nt_search_row, cursor,
-                        new String[]{"_id", "sdata01", "sdata02", "sdata03", "sdata04", "sdata06", "sdata05", "sdata07"},
+                        new String[]{"_id", "sdata01", "sdata02", "sdata03", "sdata04", "sdata06", "sdata05", "sdata08", "sdata09", "sdata07"},
                         //new int[]{R.id.tv_stt, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri},
-                        new int[]{R.id.tv_stt, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_date},
+                        new int[]{R.id.tv_stt, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_mausac,R.id.tv_dauccuc, R.id.tv_date},
                         SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
                 simpleCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -372,14 +382,15 @@ public class NT_search extends AppCompatActivity {
                             String g_sdata05 = jsonObject.getString("TC_BAD005"); //Khu
                             String g_sdata06 = jsonObject.getString("TC_BAD006"); //Vị trí con
                             String g_sdata07 = jsonObject.getString("NGAY"); //Ngày
-                            createTable.append_total(g_sdata01, g_sdata02, g_sdata03, g_sdata04, g_sdata05, g_sdata06, g_sdata07);
+                            String g_sdata08 = jsonObject.getString("TC_BAD007"); //Màu sắc
+                            String g_sdata09 = jsonObject.getString("TC_BAD008"); //đầu cực
+                            createTable.append_total(g_sdata01, g_sdata02, g_sdata03, g_sdata04, g_sdata05, g_sdata06, g_sdata07, g_sdata08, g_sdata09);
                         }
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 check_plant();
-
                                 if (cbx_qc != null && cbx_qc.getCount() > 0) {
                                     cbx_qc.getSelectedItem().toString();
                                     String s_quycach = cbx_qc.getSelectedItem().toString();
