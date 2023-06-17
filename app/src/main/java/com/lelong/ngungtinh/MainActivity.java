@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             String verCode = String.valueOf(this.getPackageManager().getPackageInfo(g_package, 0).versionCode);
             String verName = this.getPackageManager().getPackageInfo(g_package, 0).versionName;
-            tv_ver.setText("SV: "+ g_server +" VerCode: " + verCode + " VerName: " + verName);
+            tv_ver.setText("SV: " + g_server + " VerCode: " + verCode + " VerName: " + verName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         // Check for camera permission
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted, request for it
-            ActivityCompat.requestPermissions(activity, new String[] { Manifest.permission.CAMERA }, 1);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 1);
         }
     }
 
@@ -248,18 +248,19 @@ public class MainActivity extends AppCompatActivity {
                                 //Toast alert = Toast.makeText(MainActivity.this, getString(R.string.main_E03), Toast.LENGTH_LONG);
                                 //alert.show();
 
-                                Intent login = new Intent();
+                                /*Intent login = new Intent();
                                 login.setClass(MainActivity.this, Menu.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("ID", editID.getText().toString());
                                 bundle.putString("SERVER", g_server);
                                 login.putExtras(bundle);
-                                startActivity(login);
+                                startActivity(login);*/
+                                Toast.makeText(getApplicationContext(), "登入失敗 Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
+                   /* runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //Toast alert = Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG);
@@ -272,7 +273,13 @@ public class MainActivity extends AppCompatActivity {
                             login.putExtras(bundle);
                             startActivity(login);
                         }
+                    });*/
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "登入失敗 Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                        }
                     });
+
                 }
             }
         }).start();

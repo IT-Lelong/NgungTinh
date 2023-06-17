@@ -64,6 +64,7 @@ public class Menu extends AppCompatActivity {
     JSONArray tjsonupload, jsonupload;
     JSONObject ujobject;
     private Create_Table db = null;
+    private NT_Loaddata NT_Loaddata = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +152,9 @@ public class Menu extends AppCompatActivity {
                 case R.id.btn_NT01: {
                     String INOUT = "IN";
 
+                    NT_Loaddata = new NT_Loaddata(Menu.this, g_server);
+                    NT_Loaddata.load_data_bad();
+
                     Dialog dialog = new Dialog(v.getContext());
                     dialog.setContentView(R.layout.nt_dialog1);
 
@@ -202,6 +206,9 @@ public class Menu extends AppCompatActivity {
                 //Quét xuất
                 case R.id.btn_NT02: {
                     String INOUT = "OUT";
+
+                    NT_Loaddata = new NT_Loaddata(Menu.this, g_server);
+                    NT_Loaddata.load_data_bad();
 
                     Dialog dialog = new Dialog(v.getContext());
                     dialog.setContentView(R.layout.nt_dialog1);

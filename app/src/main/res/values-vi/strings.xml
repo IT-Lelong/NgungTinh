@@ -54,7 +54,7 @@
     /*nt_setup_data*/
     <string name="nt_sxuong">Xưởng</string>
     <string name="nt_skhu">Khu</string>
-    <string name="nt_scon">Vị trí</string>
+    <string name="nt_scon">V.trí</string>
     <string name="nt_ssl">Số lượng</string>
     <string name="btn_sinsert">Thêm mới</string>
     <string name="nt_danhsach">Danh sách</string>
@@ -73,9 +73,13 @@
     <string name="tt_stt">STT</string>
     <string name="btn_search">Tra cứu</string>
     <string name="M05">Xác nhận kết chuyển dữ liệu?</string>
+
+
+    <string name="nt_post">Xuất kho ngưng tịnh?</string>
+    <string name="nt_num">Số lượng</string>
     //mausac,ngungtinh
-    <string name="sc_mausac">Màu sắc</string>
-    <string name="nt_daucuc">Đầu cực</string>
+    <string name="sc_mausac">M.sắc</string>
+    <string name="nt_daucuc">Đ.cực</string>
 
 
 

@@ -43,9 +43,7 @@ public class update_data {
         db.open();
         createTable = new Create_Table(this.mCtxAPI);
         createTable.open();
-        new
-
-                Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 Cursor upl = db.getAll_tc_bac_1(l_key);
