@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     EditText editID, editPassword;
     CheckBox onlinecheck, SaveCheck;
     TextView tv_ver;
-    //String g_server = "PHP";
-    String g_server = "PHPtest";
+    String g_server = "PHP";
+    //String g_server = "PHPtest";
     String g_package = "";
     Locale locale;
     String ID, PASSWORD;

@@ -61,26 +61,10 @@ public class update_data {
                     if (res.contains("false")) {
                         createTable.upd_chk_scan(l_key,"N");
                         res_interface.loadData2("FALSE");
-
                     } else {
-
                         createTable.upd_chk_scan(l_key,"Y");
                         res_interface.loadData2("TRUE");
                     }
-
-                    /*runOnUiThread(new Runnable() { //Vì Toast không thể chạy đc nếu không phải UI Thread nên sử dụng runOnUIThread.
-                        @Override
-                        public void run() {
-                            if (res.contains("false")) {
-                                //Toast.makeText(getApplicationContext(), getString(R.string.M09), Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thất bại ", Toast.LENGTH_SHORT).show();
-                            } else {
-                                //Toast.makeText(getApplicationContext(), getString(R.string.M08), Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getApplicationContext(), "Kết chuyễn dữ liệu thành công ", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });*/
-
                 }
             }
         }).

@@ -80,68 +80,6 @@ public class NT_search extends AppCompatActivity {
         createTable.del_total();
         getcode_up();
         //23041001 by Andy added (E)
-//23041001 by Andy mark (S)
-        /*if (cbx_qc != null && cbx_qc.getCount() > 0) {
-            cbx_qc.getSelectedItem().toString();
-            String s_quycach = cbx_qc.getSelectedItem().toString();
-            check_region(s_quycach);
-            cbx_qc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position >= 0) {
-                        cbx_qc.getSelectedItem().toString();
-                        String s_quycach = cbx_qc.getSelectedItem().toString();
-                        check_region(s_quycach);
-                    }
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-
-            });
-        }*/
-        /*edt_vaont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
-                datePickerDialog = new DatePickerDialog(NT_search.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        //edt_vaont.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
-                        edt_vaont.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-                    }
-                }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
-
-        });
-        edt_rant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
-                datePickerDialog = new DatePickerDialog(NT_search.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        edt_rant.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
-                        //edt_rant.setText(dateFormat.format((dayOfMonth+"/"+(monthOfYear+1)+"/"+year);
-                    }
-                }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
-
-        });*/
-        //23041001 by Andy mark (E)
         btn_Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -328,41 +266,11 @@ public class NT_search extends AppCompatActivity {
         stationlist.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cbx_x.setAdapter(stationlist);
         cbx_x.setSelection(stationlist.getCount());
-        // cursor_1.moveToNext();
+
     }
 
 
-    //private int check_count(String lc_xuong, String lc_khu, String lc_vitri) {
-    //cursor_1 = createTable.getAll_count_01(lc_xuong, lc_khu, lc_vitri);
-    //cursor_1.moveToFirst();
-    //int n_count = cursor_1.getCount();
-    // return n_count;
-    // }
 
-    //private void load_data() {
-
-    //Cursor cursor = createTable.getAll_setup_data();
-    //SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
-    //    R.layout.nt_setupdata_row, cursor,
-    //   new String[]{"_id", "setup01", "setup02", "setup03"},
-    //   new int[]{R.id.st_stt, R.id.st_plant, R.id.st_region, R.id.st_cpos},
-    //   SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-
-    //simpleCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-    //   @Override
-    //  public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-    //     if (view.getId() == R.id.st_stt) {
-    //        int rowNumber = cursor.getPosition() + 1;
-    //        ((TextView) view).setText(String.valueOf(rowNumber));
-    //        return true;
-    //    }
-    //    return false;
-    // }
-    // });
-
-    //  lv_setup.setAdapter(simpleCursorAdapter);
-
-    //}
 
     private void getcode_up() {
         new Thread(new Runnable() {
@@ -403,9 +311,7 @@ public class NT_search extends AppCompatActivity {
                                                 String s_quycach = cbx_qc.getSelectedItem().toString();
                                                 check_region(s_quycach);
                                             }
-
                                         }
-
                                         @Override
                                         public void onNothingSelected(AdapterView<?> parent) {
 

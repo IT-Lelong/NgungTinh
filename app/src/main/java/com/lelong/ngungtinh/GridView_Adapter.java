@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+
 import java.util.List;
 
 public class GridView_Adapter extends ArrayAdapter<String> {
@@ -42,6 +43,7 @@ public class GridView_Adapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.activity_nt_dsvt_item, parent, false);
         }
@@ -71,11 +73,16 @@ public class GridView_Adapter extends ArrayAdapter<String> {
         btn_IOScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String l_vtri = mData.get(position);
+
+               String l_vtri = mData.get(position);
                 ntds_interface.loadData1(conf_xuong, conf_khu, l_vtri);
+
+
+
             }
         });
 
         return convertView;
     }
+
 }

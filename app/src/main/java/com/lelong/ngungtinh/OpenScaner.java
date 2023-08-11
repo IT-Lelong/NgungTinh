@@ -292,13 +292,6 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         }
     }
 
-    //Số lượng tiêu chuẩn
-   /* private int c_standard(String tt_xuong, String tt_khu, String tt_vitri) {
-        cursor_1 = createTable.getAll_standard(tt_xuong, tt_khu, tt_vitri);
-        cursor_1.moveToFirst();
-        int n_count3 = cursor_1.getInt(0);
-        return n_count3;
-    }*/
 
     private void clear_map() {
         SaveCode = "";

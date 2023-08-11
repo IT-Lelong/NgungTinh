@@ -7,8 +7,10 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -18,9 +20,14 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +46,10 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
     Button btn_conf2;
     SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd");
     private update_data Update_data = null;
+    private NT_Loaddata NT_Loaddata = null;
+    ArrayList<nt_lv_dsdata1> nt_lv_dsdata1;
+    GridView_Adapter_lv_dsdata1 GridView_Adapter_lv_dsdata1;
+    ArrayAdapter<String> stationlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +106,8 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
     }
 
     private void load_data1(String conf_xuong, String conf_khu, String l_vtri) {
-
-        Cursor cursor = createTable.getAll_ntds_data(conf_xuong, conf_khu, l_vtri);
+        //23071101 by Andy mark
+        /*Cursor cursor = createTable.getAll_ntds_data(conf_xuong, conf_khu, l_vtri);
         SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
                 R.layout.activity_nt_dsvt_row, cursor,
                 new String[]{"_id", "sdata03", "sdata04", "sdata06","sdata08","sdata09","sdata05"},
@@ -115,8 +126,53 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
             }
         });
 
-        lv_dsdata1.setAdapter(simpleCursorAdapter);
+        lv_dsdata1.setAdapter(simpleCursorAdapter);*/
+        //23071101 by Andy added (S)
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String res = getcodedata("http://172.16.40.20/" + g_server + "/WMS/get_Datashow2.php?item=" + conf_xuong + "&item2=" + conf_khu + "&item3=" + l_vtri);
+                if (res.length() > 0 && !res.equals("FALSE")) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONArray jsonArray = new JSONArray(res);
 
+                                nt_lv_dsdata1 = new ArrayList<nt_lv_dsdata1>();
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    String vtri = jsonObject.getString("TC_BAD003");
+                                    String doncong = jsonObject.getString("TC_BAD004");
+                                    String quycach = jsonObject.getString("TC_BAD006");
+                                    String msac = jsonObject.getString("TC_BAD007");
+                                    String dcuc = jsonObject.getString("TC_BAD008");
+                                    Integer sluong = Integer.parseInt(jsonObject.getString("TC_BAD005"));
+
+                                    nt_lv_dsdata1.add(new nt_lv_dsdata1(vtri, doncong, quycach, msac, dcuc, sluong));
+                                }
+                                //lv_kho.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                                GridView_Adapter_lv_dsdata1 = new GridView_Adapter_lv_dsdata1(NT_DSVT.this, R.layout.activity_nt_dsvt_row, nt_lv_dsdata1);
+
+                                //set dữu liệu từ adapter vào listview
+                                lv_dsdata1.setAdapter(GridView_Adapter_lv_dsdata1);
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "沒有查詢資料 Không có dữ liệu để tra cứu (1)", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+        //
         lv_dsdata1.setOnItemClickListener((parent, view, position, id) -> {
 
             // Tạo đối tượng PopupMenu
@@ -149,6 +205,11 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
 
                             dg_soluong = nt_dialog2.findViewById(R.id.dg_soluong);
                             dg_soluong.setText(dsvt_sl.getText());
+
+                            Integer sluong_tt = Integer.parseInt(dg_soluong.getText().toString());
+                            NT_Loaddata = new NT_Loaddata(NT_DSVT.this, g_server);
+                            NT_Loaddata.load_data_bad();
+
                             btn_conf2 = nt_dialog2.findViewById(R.id.btn_conf2);
                             LocalTime now = LocalTime.now();
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmss");
@@ -162,14 +223,14 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                                     String l_vitri2 = dsvt_vitri.getText().toString().trim();
                                     String l_doncong2 = dsvt_doncong.getText().toString().trim();
                                     String l_quycach2 = dsvt_qc.getText().toString().trim();
-                                    String l_mausac  = dsvt_mausac.getText().toString().trim();
+                                    String l_mausac = dsvt_mausac.getText().toString().trim();
                                     String l_diencuc = dsvt_diencuc.getText().toString().trim();
                                     Integer l_trave = sum_total2(l_xuong2, l_khu2, l_vitri2, l_doncong2);
                                     String res = "";
                                     //tv_ngayvao.setText(dateFormat1.format(new Date()).toString());
                                     String ngay_vao = dateFormat1.format(new Date()).toString();
 
-                                    if (Integer.parseInt(dg_soluong.getText().toString()) > l_trave) {
+                                    if (Integer.parseInt(dg_soluong.getText().toString()) > sluong_tt) {
                                         String message = String.format("輸入數量超過庫存量 Số lượng vượt quá lượng tồn kho: %s", l_trave);
                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                     } else {
@@ -186,7 +247,7 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                                                 dg_soluong.getText().toString().replace(",", ""),
                                                 "",
                                                 s_date2,
-                                                ngay_vao, conf_xuong, conf_khu, l_vtri, g_INOUT, ID, ngay_vao,l_mausac,l_diencuc, "");
+                                                ngay_vao, conf_xuong, conf_khu, l_vtri, g_INOUT, ID, ngay_vao, l_mausac, l_diencuc, "");
 
                                         if (res.equals("TRUE")) {
                                             res_interface resInterface = new res_interface() {
@@ -196,7 +257,7 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
                                                         public void run() {
                                                             if (l_res.equals("TRUE")) {
                                                                 Toast.makeText(getApplicationContext(), "完成存放 Lưu trữ hoàn tất!", Toast.LENGTH_SHORT).show();
-                                                                load_data1(conf_xuong,conf_khu,l_vtri);
+                                                                load_data1(conf_xuong, conf_khu, l_vtri);
                                                                 nt_dialog2.dismiss();
                                                             } else {
                                                                 Toast.makeText(getApplicationContext(), "存放失敗 Lưu trữ thất bại! (2)", Toast.LENGTH_SHORT).show();
@@ -208,7 +269,6 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
 
                                             Update_data = new update_data(NT_DSVT.this, g_server, str2, resInterface);
                                             Update_data.up_oracle();
-
                                         } else {
                                             //Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
                                             runOnUiThread(new Runnable() {
@@ -235,6 +295,49 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
     @Override
     public void loadData1(String conf_xuong, String conf_khu, String l_vtri) {
         load_data1(conf_xuong, conf_khu, l_vtri);
+        /*Thread thread_load = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //Looper.prepare();
+                NT_Loaddata = new NT_Loaddata(NT_DSVT.this, g_server);
+                NT_Loaddata.load_data_bad();
+                //Looper.loop();
+            }
+        });
+
+        Thread thread_show = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Looper.prepare();
+                        load_data1(conf_xuong, conf_khu, l_vtri);
+                        //Looper.loop();
+                    }
+                });
+
+            }
+        });
+
+        new Thread() {
+            @Override
+            public void run() {
+
+                thread_load.start();
+                try {
+                    thread_load.join();
+
+
+                    thread_show.start();
+                    try {
+                        thread_show.join();
+                    } catch (InterruptedException e) {
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        }.start();*/
     }
 
 
@@ -246,6 +349,30 @@ public class NT_DSVT extends AppCompatActivity implements ntds_interface {
             return n_count22;
         } else {
             return 0;
+        }
+    }
+
+    private String getcodedata(String s) {
+        try {
+            HttpURLConnection conn = null;
+            URL url = new URL(s);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(999999);
+            conn.setReadTimeout(999999);
+            conn.setDoInput(true); //允許輸入流，即允許下載
+            conn.setDoOutput(true); //允許輸出流，即允許上傳
+            conn.connect();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String jsonstring = reader.readLine();
+            reader.close();
+            if (!jsonstring.equals("FALSE")) {
+                return jsonstring;
+            } else {
+                return "FALSE";
+            }
+        } catch (Exception e) {
+            return "FALSE";
         }
     }
 }
