@@ -5,9 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Create_Table {
-
+    private Call_interface callInterface;
     private Context mCtx = null;
     String DATABASE_NAME = "NgungTinhDB.db";
     public SQLiteDatabase db = null;
@@ -90,6 +96,9 @@ public class Create_Table {
 
     public void open() throws SQLException {
         db = mCtx.openOrCreateDatabase(DATABASE_NAME, 0, null);
+    }
+    public void setInsertCallback(Call_interface callback) {
+        this.callInterface = callback;
     }
 
     public void createTable() {
@@ -593,5 +602,71 @@ public class Create_Table {
         Cursor c = null;
      
         return c;
+    }
+
+    public class InsertDataTask extends AsyncTask<String, Integer, Integer> {
+        int progress;
+        private ProgressBar progressBar;
+
+        public InsertDataTask(ProgressBar progressBar) {
+            this.progressBar = progressBar;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            String jsonData = params[0];
+            try {
+                JSONArray jsonArray = new JSONArray(jsonData);
+                int totalItems = jsonArray.length();
+                for (int i = 0; i < totalItems; i++) {
+                    JSONObject jsonObject;
+                    // Thực hiện insert dữ liệu từ jsonObject
+                    try {
+                        jsonObject = jsonArray.getJSONObject(i);
+                        String g_ima01 = jsonObject.getString("IMA01");
+                        String g_imaud04 = jsonObject.getString("IMAUD04");
+
+                        insert_ima_file(g_ima01, g_imaud04);
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    // Cập nhật tiến độ
+                    progress = (int) (((i + 1) / (float) totalItems) * 100);
+                    publishProgress(progress);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return progress;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int progress = values[0];
+            // Cập nhật tiến độ insert dữ liệu trên giao diện
+            progressBar.setProgress(progress); // Cập nhật tiến trình trên ProgressBar
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            // Hoàn thành quá trình insert
+            if (result == 100) {
+                callInterface.ImportData_onInsertComplete("OK");
+            }
+        }
+
+
+    }
+
+    private void insert_ima_file(String g_ima01, String g_imaud04) {
+        try {
+            ContentValues args = new ContentValues();
+            args.put("ima01", g_ima01);
+            args.put("imaud04", g_imaud04);
+            db.insert(TABLE_NAME_IMA, null, args);
+        } catch (Exception e) {
+        }
     }
 }

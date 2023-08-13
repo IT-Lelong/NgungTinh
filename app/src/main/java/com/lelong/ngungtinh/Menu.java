@@ -1,7 +1,5 @@
 package com.lelong.ngungtinh;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -20,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +26,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.lelong.ngungtinh.KTnew.nt_dialog1;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,11 +40,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Menu extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class Menu extends AppCompatActivity implements Call_interface {
 
     private Create_Table Cre_db = null;
     String g_server = "";
@@ -61,10 +66,13 @@ public class Menu extends AppCompatActivity {
     Cursor cursor_1;
     String[] station = new String[0];
     ArrayAdapter<String> stationlist;
-    JSONArray tjsonupload, jsonupload;
+    JSONArray jsonupload;
     JSONObject ujobject;
     private Create_Table db = null;
     private NT_Loaddata NT_Loaddata = null;
+    Dialog dialog;
+    TextView tv_syncName;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +80,13 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-
         //actionBar = getSupportActionBar();
         //actionBar.hide();
         Bundle getbundle = getIntent().getExtras();
         ID = getbundle.getString("ID");
         g_server = Constant_Class.server;
         menuID = (TextView) findViewById(R.id.menuID);
-        new IDname().execute("http://172.16.40.20/" + g_server + "/getid.php?ID=" + ID);
+        new IDname().execute("http://172.16.40.20/" + Constant_Class.server + "/");
 
         Cre_db = new Create_Table(this);
         Cre_db.open();
@@ -104,6 +111,70 @@ public class Menu extends AppCompatActivity {
         super.onResume();
         checkAppUpdate = new CheckAppUpdate(this, g_server);
         checkAppUpdate.checkVersion();
+    }
+
+    //Khởi tạo menu trên thanh tiêu đề (S)
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_opt, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String g_status;
+        switch (item.getItemId()) {
+            case R.id.refresh_datatable:
+                dialog = new Dialog(this);
+                dialog.setContentView(R.layout.data_sync_layout);
+                tv_syncName = dialog.findViewById(R.id.tv_syncName);
+                progressBar = dialog.findViewById(R.id.impotDataProgressBar);
+
+                tv_syncName.setText("");
+                Cre_db.delete_table();
+                Import_Data("ALLBATTERY");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void Import_Data(String g_item) {
+        String baseUrl = "http://172.16.40.20/" + Constant_Class.server + "/";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.getDataTable(baseUrl + "get_ima_file.php?ima01=" + g_item);
+
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                if (response.isSuccessful()) {
+                    JsonArray jsonArray = response.body();
+                    //Cre_db.insertData(g_table,jsonArray);
+                    Cre_db.setInsertCallback(Menu.this);
+                    Create_Table.InsertDataTask insertDataTask = Cre_db.new InsertDataTask(progressBar);
+                    insertDataTask.execute(String.valueOf(jsonArray));
+                } else {
+                    // Xử lý trường hợp response không thành công
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                // Xử lý trường hợp lỗi
+            }
+        });
+    }
+
+    //Khởi tạo menu trên thanh tiêu đề (E)
+
+    @Override
+    public void ImportData_onInsertComplete(String status) {
+        Toast.makeText(this, "Hoàn tất đồng bộ dữ liệu", Toast.LENGTH_SHORT).show();
     }
 
     //取得登入者姓名
@@ -168,6 +239,82 @@ public class Menu extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public String upload_all(String apiUrl) {
+        HttpURLConnection conn = null;
+        try {
+            URL url = new URL(apiUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(999999);
+            conn.setReadTimeout(999999);
+            conn.setDoInput(true); //允許輸入流，即允許下載
+            conn.setDoOutput(true); //允許輸出流，即允許上傳
+
+            OutputStream os = conn.getOutputStream();
+            DataOutputStream writer = new DataOutputStream(os);
+            writer.write(ujobject.toString().getBytes("UTF-8"));
+            writer.flush();
+            writer.close();
+            os.close();
+            InputStream is = conn.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String result = reader.readLine();
+            reader.close();
+            return result;
+        } catch (Exception ex) {
+            return "false";
+        } finally {
+            if (conn != null) {
+
+                conn.disconnect();
+
+            }
+        }
+    }
+
+    public JSONArray cur2Json(Cursor cursor) {
+        JSONArray resultSet = new JSONArray();
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            int totalColumn = cursor.getColumnCount();
+            JSONObject rowObject = new JSONObject();
+            for (int i = 0; i < totalColumn; i++) {
+                if (cursor.getColumnName(i) != null) {
+                    try {
+                        rowObject.put(cursor.getColumnName(i),
+                                cursor.getString(i));
+                    } catch (Exception e) {
+                    }
+                }
+            }
+            resultSet.put(rowObject);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return resultSet;
+    }
+
+    private void setLanguage() {
+        SharedPreferences preferences = getSharedPreferences("Language", Context.MODE_PRIVATE);
+        int language = preferences.getInt("Language", 0);
+        Resources resources = getResources();
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        Configuration configuration = resources.getConfiguration();
+        switch (language) {
+            case 0:
+                configuration.setLocale(Locale.TRADITIONAL_CHINESE);
+                break;
+            case 1:
+                locale = new Locale("vi");
+                Locale.setDefault(locale);
+                configuration.setLocale(locale);
+                break;
+        }
+        resources.updateConfiguration(configuration, displayMetrics);
     }
 
     private Button.OnClickListener btnlistener = new Button.OnClickListener() {
@@ -402,82 +549,6 @@ public class Menu extends AppCompatActivity {
         }
     };
 
-    public String upload_all(String apiUrl) {
-        HttpURLConnection conn = null;
-        try {
-            URL url = new URL(apiUrl);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(999999);
-            conn.setReadTimeout(999999);
-            conn.setDoInput(true); //允許輸入流，即允許下載
-            conn.setDoOutput(true); //允許輸出流，即允許上傳
-
-            OutputStream os = conn.getOutputStream();
-            DataOutputStream writer = new DataOutputStream(os);
-            writer.write(ujobject.toString().getBytes("UTF-8"));
-            writer.flush();
-            writer.close();
-            os.close();
-            InputStream is = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String result = reader.readLine();
-            reader.close();
-            return result;
-        } catch (Exception ex) {
-            return "false";
-        } finally {
-            if (conn != null) {
-
-                conn.disconnect();
-
-            }
-        }
-    }
-
-    public JSONArray cur2Json(Cursor cursor) {
-        JSONArray resultSet = new JSONArray();
-        cursor.moveToFirst();
-        while (cursor.isAfterLast() == false) {
-            int totalColumn = cursor.getColumnCount();
-            JSONObject rowObject = new JSONObject();
-            for (int i = 0; i < totalColumn; i++) {
-                if (cursor.getColumnName(i) != null) {
-                    try {
-                        rowObject.put(cursor.getColumnName(i),
-                                cursor.getString(i));
-                    } catch (Exception e) {
-                    }
-                }
-            }
-            resultSet.put(rowObject);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return resultSet;
-    }
-
-    private void setLanguage() {
-        SharedPreferences preferences = getSharedPreferences("Language", Context.MODE_PRIVATE);
-        int language = preferences.getInt("Language", 0);
-        Resources resources = getResources();
-        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        Configuration configuration = resources.getConfiguration();
-        switch (language) {
-            case 0:
-                configuration.setLocale(Locale.TRADITIONAL_CHINESE);
-                break;
-            case 1:
-                locale = new Locale("vi");
-                Locale.setDefault(locale);
-                configuration.setLocale(locale);
-                break;
-        }
-        resources.updateConfiguration(configuration, displayMetrics);
-    }
-
     private void check_plant(Context dialog1) {
         cursor_1 = createTable.getAll_setup_01();
         cursor_1.moveToFirst();
@@ -526,59 +597,5 @@ public class Menu extends AppCompatActivity {
         cbx_khu.setSelection(0);
 
     }
-
-    //Khởi tạo menu trên thanh tiêu đề (S)
-    @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_opt, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String g_status;
-        switch (item.getItemId()) {
-            case R.id.refresh_datatable:
-                Cre_db.delete_table();
-                Import_Data("ALLBATTERY");
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    private void Import_Data(String g_table) {
-        String baseUrl = "http://172.16.40.20/" + Constant_Class.server + "/HSEAPP/";
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.getDataTable(baseUrl + "getData.php?item=" + g_table);
-
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                if (response.isSuccessful()) {
-                    JsonArray jsonArray = response.body();
-                    //Cre_db.insertData(g_table,jsonArray);
-                    Cre_db.setInsertCallback(Menu.this);
-                    Create_Table.InsertDataTask insertDataTask = Cre_db.new InsertDataTask(progressBar);
-                    insertDataTask.execute(g_table, String.valueOf(jsonArray));
-                } else {
-                    // Xử lý trường hợp response không thành công
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                // Xử lý trường hợp lỗi
-            }
-        });
-    }
-
-    //Khởi tạo menu trên thanh tiêu đề (E)
 
 }
