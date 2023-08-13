@@ -48,18 +48,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".KTnew.MainActivity2"
-            android:exported="false"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".KTnew.KT_Main"
-            android:exported="false"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".KTnew.KT_Menu"
-            android:exported="false"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".KTnew.nt_dialog1"
             android:exported="false"
             android:screenOrientation="portrait" />

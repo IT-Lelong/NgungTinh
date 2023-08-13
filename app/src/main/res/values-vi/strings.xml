@@ -21,6 +21,7 @@
     <string name="btn_nt04">KẾT CHUYỂN</string>
     <string name="btn_nt05">THIẾP LẬP DỮ LIỆU</string>
     <string name="btn_nt06">TRA CỨU CHI TIẾT</string>
+    <string name="Change_Data">Đồng bộ dữ liệu</string>
 
     /* activity_main */
     <string name="main_id">Tài khoản：</string>

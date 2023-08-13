@@ -11,6 +11,10 @@ public class Create_Table {
     private Context mCtx = null;
     String DATABASE_NAME = "NgungTinhDB.db";
     public SQLiteDatabase db = null;
+
+    //Tạo table chứa mã vật liệu
+    String TABLE_NAME_IMA = "ima_file";
+
     //
     String TB_basic_data_file = "basic_data_file";
     String dulieu01 = "dulieu01"; //Mã Xưởng
@@ -58,7 +62,6 @@ public class Create_Table {
     String sdata08 = "sdata08"; //Màu sắc
     String sdata09 = "sdata09"; //Điện cuc
 
-
     String CREATE_TB_basic_data_file = "CREATE TABLE IF NOT EXISTS " + TB_basic_data_file + " ("
             + dulieu01 + " TEXT," + dulieu02 + " TEXT," + dulieu03 + " TEXT,"
             + dulieu04 + " DECIMAL," + dulieu05 + " DECIMAL)";
@@ -79,6 +82,8 @@ public class Create_Table {
             + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT,"
             + sdata06 + " TEXT," + sdata07 + " TEXT," + sdata08 + " TEXT," + sdata09 + " TEXT )";
 
+    String CREATE_TABLE_IMA = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_IMA + " (imaxuong TEXT, ima01 TEXT, imaud04 TEXT)";
+
     public Create_Table(Context ctx) {
         this.mCtx = ctx;
     }
@@ -93,6 +98,7 @@ public class Create_Table {
             db.execSQL(CREATE_TABLE_scandata);
             db.execSQL(CREATE_TB_setup_data_file);
             db.execSQL(CREATE_TB_total_sdata_file);
+            db.execSQL(CREATE_TABLE_IMA);
         } catch (Exception e) {
 
         }
@@ -108,6 +114,8 @@ public class Create_Table {
             db.execSQL(DROP_TABLE_TB_setup_data_file);
             String DROP_TABLE_TB_total_sdata_file = "DROP TABLE IF EXISTS " + TB_total_sdata_file;
             db.execSQL(DROP_TABLE_TB_total_sdata_file);
+            String DROP_TABLE_TB_ima_file = "DROP TABLE IF EXISTS " + TABLE_NAME_IMA;
+            db.execSQL(DROP_TABLE_TB_ima_file);
             db.close();
         } catch (Exception e) {
 
@@ -579,5 +587,11 @@ public class Create_Table {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public Cursor getBatteryData() {
+        Cursor c = null;
+     
+        return c;
     }
 }

@@ -6,7 +6,9 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -15,8 +17,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,7 +46,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class OpenScaner extends AppCompatActivity implements res_interface {
@@ -89,8 +95,8 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         g_server = getBundle.getString("SERVER");
         createTable = new Create_Table(this);
         createTable.open();
-        create_table = new Create_Table(this);
-        create_table.open();
+        /*create_table = new Create_Table(this);
+        create_table.open();*/
 
 
         /*g_xuong = getBundle.getString("xuong");
@@ -119,6 +125,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void addControlEvent() {
 
 
@@ -258,6 +265,49 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
             //create_table.upd_BasicData(g_xuong, g_khu, g_vitri, "- 1");
             clear_map();
         });
+
+        tv_qrcode.setOnTouchListener((v, event) -> {
+            if(conf_khu.equals("D92")){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(OpenScaner.this);
+                builder.setTitle("Xác nhận");
+                builder.setMessage("Bạn có chắc muốn thực hiện nhập thủ công?");
+
+                builder.setPositiveButton("Đồng ý", (dialog, which) -> {
+                    // Thực hiện hành động khi người dùng đồng ý
+                    List<String> materialList = new ArrayList<>();
+                    Cursor cursor = createTable.getBatteryData();
+                    if (yourCursor.moveToFirst()) {
+                        do {
+                            String maVatLieu = yourCursor.getString(yourCursor.getColumnIndex("MaVatLieu"));
+                            String quyCach = yourCursor.getString(yourCursor.getColumnIndex("QuyCach"));
+                            String materialInfo = maVatLieu + " - " + quyCach;
+                            materialList.add(materialInfo);
+                        } while (yourCursor.moveToNext());
+                    }
+                    // Thêm các mã vật liệu khác vào danh sách
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(OpenScaner.this, android.R.layout.simple_list_item_1, materialList);
+
+                    AlertDialog.Builder materialDialogBuilder = new AlertDialog.Builder(OpenScaner.this);
+                    materialDialogBuilder.setTitle("Chọn mã vật liệu");
+                    materialDialogBuilder.setAdapter(adapter, (materialDialog, position) -> {
+                        String selectedMaterial = materialList.get(position);
+                        // Cập nhật TextView với mã vật liệu được chọn
+                        tv_qrcode.setText(selectedMaterial);
+                    });
+                    materialDialogBuilder.create().show();
+                });
+
+                builder.setNegativeButton("Hủy", (dialog, which) -> {
+                    // Hủy bỏ hành động
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+            return false;
+        });
     }
 
     //Kiểm tra đã có dữ liệu tồn tại trong table total hay chưa
@@ -312,19 +362,12 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
             cursor.moveToFirst();
             int num = cursor.getCount();
             for (int i = 0; i < num; i++) {
-                @SuppressLint("Range") String scan01 = cursor.getString(cursor.getColumnIndex("scan01"));
-                @SuppressLint("Range") String scan02 = cursor.getString(cursor.getColumnIndex("scan02"));
-                @SuppressLint("Range") String scan03 = cursor.getString(cursor.getColumnIndex("scan03"));
-                @SuppressLint("Range") String scan04 = cursor.getString(cursor.getColumnIndex("scan04"));
-                @SuppressLint("Range") String scan05 = cursor.getString(cursor.getColumnIndex("scan05"));
-                @SuppressLint("Range") String scan06 = cursor.getString(cursor.getColumnIndex("scan06"));
-                /*@SuppressLint("Range") String scan07 = cursor.getString(cursor.getColumnIndex("scan07"));
-                @SuppressLint("Range") String scan08 = cursor.getString(cursor.getColumnIndex("scan08"));
-                @SuppressLint("Range") String scan09 = cursor.getString(cursor.getColumnIndex("scan09"));
-                @SuppressLint("Range") String scan10 = cursor.getString(cursor.getColumnIndex("scan10"));
-                @SuppressLint("Range") String scan11 = cursor.getString(cursor.getColumnIndex("scan11"));
-                @SuppressLint("Range") String scan12 = cursor.getString(cursor.getColumnIndex("scan12"));*/
-                //@SuppressLint("Range") String scanqrcode = cursor.getString(cursor.getColumnIndex("scanqrcode"));
+                String scan01 = cursor.getString(cursor.getColumnIndexOrThrow("scan01"));
+                String scan02 = cursor.getString(cursor.getColumnIndexOrThrow("scan02"));
+                String scan03 = cursor.getString(cursor.getColumnIndexOrThrow("scan03"));
+                String scan04 = cursor.getString(cursor.getColumnIndexOrThrow("scan04"));
+                String scan05 = cursor.getString(cursor.getColumnIndexOrThrow("scan05"));
+                String scan06 = cursor.getString(cursor.getColumnIndexOrThrow("scan06"));
 
                tv_qrcode.setText(scan01);
                 tv_qc.setText(scan02);
@@ -525,11 +568,6 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
             }
         });
 
-        /*if (l_res.equals("TRUE")) {
-            Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "CHIM CÚT", Toast.LENGTH_SHORT).show();
-        }*/
 
     }
 }

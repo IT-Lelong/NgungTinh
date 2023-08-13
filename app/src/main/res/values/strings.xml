@@ -20,6 +20,7 @@
     <string name="btn_nt04">拋轉</string>
     <string name="btn_nt05">設立基本資料</string>
     <string name="btn_nt06">查詢明細資料</string>
+    <string name="Change_Data">同步資料</string>
 
 
     /* activity_main */
