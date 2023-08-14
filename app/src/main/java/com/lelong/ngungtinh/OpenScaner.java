@@ -95,16 +95,6 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         g_server = getBundle.getString("SERVER");
         createTable = new Create_Table(this);
         createTable.open();
-        /*create_table = new Create_Table(this);
-        create_table.open();*/
-
-
-        /*g_xuong = getBundle.getString("xuong");
-        g_server = getBundle.getString("SERVER");
-        g_khu = IDButton.substring(0, 2);
-        g_vitri = IDButton.substring(2, 4);*/
-        //g_server = "PHP";
-        //g_server = "PHPtest";
 
         if (g_INOUT.equals("IN")){
             l_tt = "Quét nhập";
@@ -199,17 +189,9 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                             if (res.equals("TRUE")) {
                                 Update_data = new update_data(this, g_server,str,this);
                                 Update_data.up_oracle();
-
-                                //Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
-                                //clear_map();
                             } else {
                                 Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
                             }
-                        /*} else {
-                            //Toast.makeText(this, "數量太多超過可以存的數量 Số lượng vượt quá giới hạn có thể lưu trữ: %s", c_hco, Toast.LENGTH_SHORT).show();
-                            String message = String.format("數量超過可以存的數量 Số lượng vượt quá giới hạn có thể lưu trữ: %s", c_hco);
-                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-                        }*/
                     } else {
                         Integer c_sum = sum_total1(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
                         if (Integer.parseInt(tv_soluong.getText().toString()) > c_sum) {
@@ -243,8 +225,6 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                             if (res.equals("TRUE")) {
                                 Update_data = new update_data(this, g_server,str,this);
                                 Update_data.up_oracle();
-                                //Toast.makeText(this, "完成存放 Lưu trữ hoàn tất", Toast.LENGTH_SHORT).show();
-                                //clear_map();
                             } else {
                                 Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
                             }
@@ -261,8 +241,6 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         });
 
         btn_DelQrcode.setOnClickListener(v -> {
-            //create_table.delData(g_xuong, IDButton);
-            //create_table.upd_BasicData(g_xuong, g_khu, g_vitri, "- 1");
             clear_map();
         });
 
@@ -276,14 +254,14 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                 builder.setPositiveButton("Đồng ý", (dialog, which) -> {
                     // Thực hiện hành động khi người dùng đồng ý
                     List<String> materialList = new ArrayList<>();
-                    Cursor cursor = createTable.getBatteryData();
-                    if (yourCursor.moveToFirst()) {
+                    Cursor ima_cursor = createTable.getBatteryData();
+                    if (ima_cursor.moveToFirst()) {
                         do {
-                            String maVatLieu = yourCursor.getString(yourCursor.getColumnIndex("MaVatLieu"));
-                            String quyCach = yourCursor.getString(yourCursor.getColumnIndex("QuyCach"));
+                            String maVatLieu = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("IMA01"));
+                            String quyCach = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("IMAUD04"));
                             String materialInfo = maVatLieu + " - " + quyCach;
                             materialList.add(materialInfo);
-                        } while (yourCursor.moveToNext());
+                        } while (ima_cursor.moveToNext());
                     }
                     // Thêm các mã vật liệu khác vào danh sách
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(OpenScaner.this, android.R.layout.simple_list_item_1, materialList);
@@ -296,9 +274,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                         tv_qrcode.setText(selectedMaterial);
                     });
                     materialDialogBuilder.create().show();
-                });
-
-                builder.setNegativeButton("Hủy", (dialog, which) -> {
+                }).setNegativeButton("Hủy", (dialog, which) -> {
                     // Hủy bỏ hành động
                 });
 

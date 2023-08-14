@@ -88,7 +88,7 @@ public class Create_Table {
             + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT,"
             + sdata06 + " TEXT," + sdata07 + " TEXT," + sdata08 + " TEXT," + sdata09 + " TEXT )";
 
-    String CREATE_TABLE_IMA = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_IMA + " (imaxuong TEXT, ima01 TEXT, imaud04 TEXT)";
+    String CREATE_TABLE_IMA = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_IMA + " (ima01 TEXT, imaud04 TEXT)";
 
     public Create_Table(Context ctx) {
         this.mCtx = ctx;
@@ -598,12 +598,6 @@ public class Create_Table {
         }
     }
 
-    public Cursor getBatteryData() {
-        Cursor c = null;
-     
-        return c;
-    }
-
     public class InsertDataTask extends AsyncTask<String, Integer, Integer> {
         int progress;
         private ProgressBar progressBar;
@@ -668,5 +662,10 @@ public class Create_Table {
             db.insert(TABLE_NAME_IMA, null, args);
         } catch (Exception e) {
         }
+    }
+
+    public Cursor getBatteryData() {
+        String selectQuery = "SELECT ima01,imaud04 FROM ima_file ORDER BY imaud04,ima01";
+        return db.rawQuery(selectQuery, null);
     }
 }
