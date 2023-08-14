@@ -109,7 +109,7 @@ public class Menu extends AppCompatActivity implements Call_interface {
     @Override
     protected void onResume() {
         super.onResume();
-        checkAppUpdate = new CheckAppUpdate(this, g_server);
+        checkAppUpdate = new CheckAppUpdate(this);
         checkAppUpdate.checkVersion();
     }
 
