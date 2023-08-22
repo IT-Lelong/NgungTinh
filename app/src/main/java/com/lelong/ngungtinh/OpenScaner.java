@@ -22,6 +22,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -67,14 +68,12 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
     String pattern = "###,###";
     DecimalFormat decimalFormat;
-    Create_Table create_table = null;
 
-    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_qc,tv_dauccuc,tv_mausac;
+    TextView tv_qrcode, tv_ngayvao, tv_ngaysac, tv_tuan, tv_qc, tv_dauccuc, tv_mausac;
     EditText tv_soluong;
     Button btn_addQrcode, btn_DelQrcode;
     String IDButton, g_xuong, g_server, SaveCode;
-    String g_khu, g_vitri,l_tt;
-
+    String g_khu, g_vitri, l_tt;
 
 
     @Override
@@ -96,13 +95,13 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         createTable = new Create_Table(this);
         createTable.open();
 
-        if (g_INOUT.equals("IN")){
+        if (g_INOUT.equals("IN")) {
             l_tt = "Quét nhập";
-        }else{
+        } else {
             l_tt = "Quét xuất";
         }
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu + "  Vị trí con:  " + l_vtri+" Trạng thái: " + l_tt);
+        actionBar.setTitle("Xưởng： " + conf_xuong + "  Khu:  " + conf_khu + "  Vị trí con:  " + l_vtri + " Trạng thái: " + l_tt);
 
         Locale locales = new Locale("en", "EN");
         decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locales);
@@ -151,47 +150,50 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                         Integer c_tong = c_sum + Integer.parseInt(tv_soluong.getText().toString());
                         //Kiểm tra số lượng có vượt quá khả năng hay không
                         //if (c_tong <= c_hco) {
-                            //Kiểm tra trong table tổng đã có dữ liệu hay chưa
-                            Integer count1 = check_total(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
+                        //Kiểm tra trong table tổng đã có dữ liệu hay chưa
+                        Integer count1 = check_total(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
 
-                            if (count1 > 0) {
-                                //update dữ liệu vào table tổng
-                                create_table.upd_total_sdata(conf_xuong, conf_khu,
-                                        l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""), g_INOUT);
-                            } else {
-                                //insert dữ liệu vào table tổng
-                                res1 = create_table.insTotal_sdata(conf_xuong, conf_khu,
-                                        l_vtri, tv_qrcode.getText().toString().trim(),
-                                        tv_soluong.getText().toString().trim().replace(",", ""),
-                                        tv_qc.getText().toString().trim(),"",tv_mausac.getText().toString().trim(),tv_dauccuc.getText().toString().trim());
-                                if (res1.equals("TRUE")) {
-
-                                } else {
-                                    Toast.makeText(this, "更新到insSetup_data失敗 Cập nhật insSetup_data thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            //Insert dữ liệu lưu vào table lịch sử quét
-                            String str = conf_xuong.concat("/").concat(conf_khu).concat("/").concat(l_vtri).
-                                    concat("/").concat(g_INOUT).concat("/").concat(tv_ngayvao.getText().toString().trim())
-                                    .concat("/").concat(formattedTime).concat("/").concat(tv_qrcode.getText().toString().trim());
-                            res = create_table.insScanData(str,
+                        if (count1 > 0) {
+                            //update dữ liệu vào table tổng
+                            createTable.upd_total_sdata(conf_xuong, conf_khu,
+                                    l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""), g_INOUT);
+                        } else {
+                            //insert dữ liệu vào table tổng
+                            res1 = createTable.insTotal_sdata(conf_xuong, conf_khu, l_vtri,
                                     tv_qrcode.getText().toString().trim(),
-                                    tv_qc.getText().toString().trim(),
                                     tv_soluong.getText().toString().trim().replace(",", ""),
-                                    tv_tuan.getText().toString().trim(),
-                                    tv_ngaysac.getText().toString().trim(),
+                                    tv_qc.getText().toString().trim(),
                                     tv_ngayvao.getText().toString().trim(),
+                                    tv_mausac.getText().toString().trim(),
+                                    tv_dauccuc.getText().toString().trim());
+                            if (res1.equals("TRUE")) {
 
-                                    conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim(),tv_mausac.getText().toString().trim(),tv_dauccuc.getText().toString().trim(),"");
-
-                            //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
-
-                            if (res.equals("TRUE")) {
-                                Update_data = new update_data(this, g_server,str,this);
-                                Update_data.up_oracle();
                             } else {
-                                Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "更新到insSetup_data失敗 Cập nhật insSetup_data thất bại", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                        //Insert dữ liệu lưu vào table lịch sử quét
+                        String str = conf_xuong.concat("/").concat(conf_khu).concat("/").concat(l_vtri).
+                                concat("/").concat(g_INOUT).concat("/").concat(tv_ngayvao.getText().toString().trim())
+                                .concat("/").concat(formattedTime).concat("/").concat(tv_qrcode.getText().toString().trim());
+                        res = createTable.insScanData(str,
+                                tv_qrcode.getText().toString().trim(),
+                                tv_qc.getText().toString().trim(),
+                                tv_soluong.getText().toString().trim().replace(",", ""),
+                                tv_tuan.getText().toString().trim(),
+                                tv_ngaysac.getText().toString().trim(),
+                                tv_ngayvao.getText().toString().trim(),
+
+                                conf_xuong, conf_khu, l_vtri, g_INOUT, ID, tv_ngayvao.getText().toString().trim(), tv_mausac.getText().toString().trim(), tv_dauccuc.getText().toString().trim(), "");
+
+                        //createTable.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
+
+                        if (res.equals("TRUE")) {
+                            Update_data = new update_data(this, g_server, str, this);
+                            Update_data.up_oracle();
+                        } else {
+                            Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Integer c_sum = sum_total1(conf_xuong, conf_khu, l_vtri, tv_qrcode.getText().toString().trim());
                         if (Integer.parseInt(tv_soluong.getText().toString()) > c_sum) {
@@ -199,7 +201,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         } else {
                             //update dữ liệu vào table tổng
-                            create_table.upd_total_sdata(conf_xuong, conf_khu,
+                            createTable.upd_total_sdata(conf_xuong, conf_khu,
                                     l_vtri, tv_qrcode.getText().toString().trim(), tv_soluong.getText().toString().trim().replace(",", ""), g_INOUT);
 
                             //Insert dữ liệu lưu vào table lịch sử quét
@@ -207,7 +209,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                                     concat("/").concat(g_INOUT).concat("/").concat(tv_ngayvao.getText().toString().trim())
                                     .concat("/").concat(formattedTime).concat("/").concat(tv_qrcode.getText().toString().trim());
 
-                            res = create_table.insScanData(str,
+                            res = createTable.insScanData(str,
                                     tv_qrcode.getText().toString().trim(),
                                     tv_qc.getText().toString().trim(),
                                     tv_soluong.getText().toString().trim().replace(",", ""),
@@ -218,12 +220,12 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                                     conf_xuong, conf_khu, l_vtri, g_INOUT, ID,
                                     tv_ngayvao.getText().toString().trim(),
                                     tv_mausac.getText().toString().trim(),
-                                    tv_dauccuc.getText().toString().trim(),"");
+                                    tv_dauccuc.getText().toString().trim(), "");
 
-                            //create_table.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
+                            //createTable.upd_BasicData(conf_xuong, conf_khu, l_vtri, "+ 1");
 
                             if (res.equals("TRUE")) {
-                                Update_data = new update_data(this, g_server,str,this);
+                                Update_data = new update_data(this, g_server, str, this);
                                 Update_data.up_oracle();
                             } else {
                                 Toast.makeText(this, "存放失敗 Lưu trữ thất bại (1)", Toast.LENGTH_SHORT).show();
@@ -245,7 +247,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
         });
 
         tv_qrcode.setOnTouchListener((v, event) -> {
-            if(conf_khu.equals("D92")){
+            if (conf_khu.equals("D92")) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(OpenScaner.this);
                 builder.setTitle("Xác nhận");
@@ -257,30 +259,71 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                     Cursor ima_cursor = createTable.getBatteryData();
                     if (ima_cursor.moveToFirst()) {
                         do {
-                            String maVatLieu = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("IMA01"));
-                            String quyCach = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("IMAUD04"));
+                            String maVatLieu = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("ima01"));
+                            String quyCach = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("imaud04"));
                             String materialInfo = maVatLieu + " - " + quyCach;
                             materialList.add(materialInfo);
                         } while (ima_cursor.moveToNext());
                     }
-                    // Thêm các mã vật liệu khác vào danh sách
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(OpenScaner.this, android.R.layout.simple_list_item_1, materialList);
 
-                    AlertDialog.Builder materialDialogBuilder = new AlertDialog.Builder(OpenScaner.this);
-                    materialDialogBuilder.setTitle("Chọn mã vật liệu");
-                    materialDialogBuilder.setAdapter(adapter, (materialDialog, position) -> {
-                        String selectedMaterial = materialList.get(position);
-                        // Cập nhật TextView với mã vật liệu được chọn
-                        tv_qrcode.setText(selectedMaterial);
+                    // Inflate custom layout
+                    View dialogView = getLayoutInflater().inflate(R.layout.activity_open_scanner_input_d92, null);
+                    AutoCompleteTextView autoCompleteTextView = dialogView.findViewById(R.id.autoCT_mvl);
+
+                    // Set up adapter for AutoCompleteTextView
+                    //ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<>(OpenScaner.this, android.R.layout.simple_dropdown_item_1line, materialList);
+
+                    OpenScanner_CustomAutoCompleteAdapter autoCompleteAdapter = new OpenScanner_CustomAutoCompleteAdapter(this, materialList);
+                    autoCompleteTextView.setAdapter(autoCompleteAdapter);
+                    autoCompleteTextView.setThreshold(2);
+
+                    AlertDialog.Builder customDialogBuilder = new AlertDialog.Builder(OpenScaner.this);
+                    customDialogBuilder.setView(dialogView);
+                    customDialogBuilder.setPositiveButton("OK", (customDialog, whichButton) -> {
+                        // Handle AutoCompleteTextView item selection
+                        String inputString = autoCompleteTextView.getText().toString();
+                        ; // Chuỗi đầu vào
+                        int indexOfDash = inputString.indexOf("-"); // Tìm vị trí của dấu gạch ngang
+                        String inputresult = null;
+                        if (indexOfDash != -1) { // Kiểm tra xem có dấu gạch ngang trong chuỗi hay không
+                            inputresult = inputString.substring(0, indexOfDash - 1); // Cắt chuỗi từ vị trí đầu đến vị trí trước dấu gạch ngang
+                        }
+
+                        //Xử lý MVL (S)
+                        String targetMaterialCode = inputresult; // Thay thế bằng mã vật liệu bạn đang tìm kiếm
+
+                        if (ima_cursor.moveToFirst()) {
+                            do {
+                                String ima01Value = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("ima01"));
+                                if (ima01Value.equals(targetMaterialCode)) {
+                                    String imaud04Value = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("imaud04"));
+                                    String ima021Value = ima_cursor.getString(ima_cursor.getColumnIndexOrThrow("ima021"));
+                                    String[] parts = ima021Value.split(",");
+                                    tv_qrcode.setText(ima01Value);
+                                    tv_qc.setText(imaud04Value);
+                                    tv_dauccuc.setText(parts[1].trim());
+                                    tv_mausac.setText(ima01Value.substring(ima01Value.length() - 2));
+                                    tv_soluong.setText("0");
+                                    tv_ngayvao.setText(dateFormat.format(new Date()).toString());
+                                    break; // Kết thúc vòng lặp khi tìm thấy mã vật liệu
+                                }
+                            } while (ima_cursor.moveToNext());
+                        }
+                        //Xử lý MVL (E)
                     });
-                    materialDialogBuilder.create().show();
+
+                    customDialogBuilder.setNegativeButton("Cancel", (customDialog, whichButton) -> {
+                        // Handle cancel action
+                    });
+
+                    AlertDialog customDialog = customDialogBuilder.create();
+                    customDialog.show();
                 }).setNegativeButton("Hủy", (dialog, which) -> {
-                    // Hủy bỏ hành động
+                    // Handle negative button click
                 });
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
             }
             return false;
         });
@@ -333,7 +376,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
     }
 
     private void loadData() {
-        Cursor cursor = create_table.getall(conf_xuong, conf_khu, l_vtri);
+        Cursor cursor = createTable.getall(conf_xuong, conf_khu, l_vtri);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             int num = cursor.getCount();
@@ -345,7 +388,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                 String scan05 = cursor.getString(cursor.getColumnIndexOrThrow("scan05"));
                 String scan06 = cursor.getString(cursor.getColumnIndexOrThrow("scan06"));
 
-               tv_qrcode.setText(scan01);
+                tv_qrcode.setText(scan01);
                 tv_qc.setText(scan02);
                 tv_soluong.setText(scan03);
                 tv_tuan.setText(scan04);
@@ -395,7 +438,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                     throw new RuntimeException(e);
                 }
             }
-        }else{
+        } else {
             g_code = null;
             firstDetected = true;
         }
@@ -538,7 +581,7 @@ public class OpenScaner extends AppCompatActivity implements res_interface {
                 if (l_res.equals("TRUE")) {
                     Toast.makeText(getApplicationContext(), "完成存放 Lưu trữ hoàn tất!", Toast.LENGTH_SHORT).show();
                     clear_map();
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "存放失敗 Lưu trữ thất bại! (2)", Toast.LENGTH_SHORT).show();
                 }
             }

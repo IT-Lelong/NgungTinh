@@ -3,23 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#A9EDBB"
     android:orientation="vertical">
 
 
     <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:padding="8dp"
-        android:shrinkColumns="*"
-        android:stretchColumns="*">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TableRow>
+        <TableRow android:gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="left|center_vertical"
                 android:gravity="left|center_vertical"
@@ -27,11 +24,14 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <Spinner
                 android:id="@+id/cbx_dxuong"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="left|center_vertical"
+                android:dropDownWidth="100dp"
+                android:minWidth="150dp"
                 android:gravity="left|center_vertical"
                 android:hint="YYYY/MM/DD"
                 android:paddingLeft="10dp"
@@ -39,10 +39,10 @@
 
         </TableRow>
 
-        <TableRow>
+        <TableRow android:gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="left|center_vertical"
                 android:gravity="left|center_vertical"
@@ -53,8 +53,10 @@
 
             <Spinner
                 android:id="@+id/cbx_dkhu"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:dropDownWidth="100dp"
+                android:minWidth="150dp"
                 android:layout_gravity="left|center_vertical"
                 android:gravity="left|center_vertical"
                 android:hint="YYYY/MM/DD"
@@ -66,7 +68,7 @@
     </TableLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"

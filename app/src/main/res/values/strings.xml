@@ -81,4 +81,6 @@
     <string name="sc_mausac">顏色</string>
     <string name="nt_daucuc">極點</string>
 
+    //OpenScanner
+    <string name="tv_info">物料資訊</string>
 </resources>

@@ -132,8 +132,9 @@ public class Menu extends AppCompatActivity implements Call_interface {
                 progressBar = dialog.findViewById(R.id.impotDataProgressBar);
 
                 tv_syncName.setText("");
-                Cre_db.delete_table();
+                Cre_db.del_ima();
                 Import_Data("ALLBATTERY");
+                dialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -147,7 +148,7 @@ public class Menu extends AppCompatActivity implements Call_interface {
                 .build();
 
         ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.getDataTable(baseUrl + "get_ima_file.php?ima01=" + g_item);
+        Call<JsonArray> call = apiInterface.getDataTable(baseUrl + "get_ima_file.php?IMA01=" + g_item);
 
         call.enqueue(new Callback<JsonArray>() {
             @Override
@@ -174,6 +175,7 @@ public class Menu extends AppCompatActivity implements Call_interface {
 
     @Override
     public void ImportData_onInsertComplete(String status) {
+        dialog.cancel();
         Toast.makeText(this, "Hoàn tất đồng bộ dữ liệu", Toast.LENGTH_SHORT).show();
     }
 
@@ -324,9 +326,6 @@ public class Menu extends AppCompatActivity implements Call_interface {
                 //Quét nhập
                 case R.id.btn_NT01: {
                     String INOUT = "IN";
-
-                    /*NT_Loaddata = new NT_Loaddata(Menu.this, g_server);
-                    NT_Loaddata.load_data_bad();*/
 
                     Dialog dialog = new Dialog(v.getContext());
                     dialog.setContentView(R.layout.nt_dialog1);

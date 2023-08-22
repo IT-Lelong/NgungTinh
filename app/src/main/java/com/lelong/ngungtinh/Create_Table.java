@@ -88,7 +88,7 @@ public class Create_Table {
             + sdata01 + " TEXT," + sdata02 + " TEXT," + sdata03 + " TEXT," + sdata04 + " TEXT," + sdata05 + " TEXT,"
             + sdata06 + " TEXT," + sdata07 + " TEXT," + sdata08 + " TEXT," + sdata09 + " TEXT )";
 
-    String CREATE_TABLE_IMA = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_IMA + " (ima01 TEXT, imaud04 TEXT)";
+    String CREATE_TABLE_IMA = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_IMA + " (ima01 TEXT, imaud04 TEXT, ima021 TEXT)";
 
     public Create_Table(Context ctx) {
         this.mCtx = ctx;
@@ -146,8 +146,6 @@ public class Create_Table {
         }
     }
 
-    /*public String insScanData(String g_scan01, String g_scan02, String g_scan03, String g_scan04,
-                              String g_scan05, String g_scan06, String g_scanqrcode, String g_scanlocation, String g_scanfactory) {*/
 
     public String insScanData(String g_scan00, String g_scan01, String g_scan02, String g_scan03,
                               String g_scan04, String g_scan05, String g_scan06, String g_scan07,
@@ -386,12 +384,9 @@ public class Create_Table {
         db.execSQL("delete from " + TB_total_sdata_file);
     }
 
-    //update setup_file
-    /*public void upd_setup_file(String gXuong, String gKhu, String gVitri, String gsl) {
-        db.execSQL("UPDATE " + TB_setup_data_file +
-                " SET setup04 = '" + gsl + "' " +
-                " WHERE setup01 = '" + gXuong + "' And setup02 = '" + gKhu + "' And setup03 = '" + gVitri + "' ");
-    }*/
+    public void del_ima() {
+        db.execSQL("delete from " + TABLE_NAME_IMA);
+    }
 
     public void delete_table() {
         db.delete(TB_basic_data_file, null, null);
@@ -619,8 +614,9 @@ public class Create_Table {
                         jsonObject = jsonArray.getJSONObject(i);
                         String g_ima01 = jsonObject.getString("IMA01");
                         String g_imaud04 = jsonObject.getString("IMAUD04");
+                        String g_ima021 = jsonObject.getString("IMA021");
 
-                        insert_ima_file(g_ima01, g_imaud04);
+                        insert_ima_file(g_ima01, g_imaud04, g_ima021);
 
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
@@ -654,18 +650,19 @@ public class Create_Table {
 
     }
 
-    private void insert_ima_file(String g_ima01, String g_imaud04) {
+    private void insert_ima_file(String g_ima01, String g_imaud04, String g_ima021) {
         try {
             ContentValues args = new ContentValues();
             args.put("ima01", g_ima01);
             args.put("imaud04", g_imaud04);
+            args.put("ima021", g_ima021);
             db.insert(TABLE_NAME_IMA, null, args);
         } catch (Exception e) {
         }
     }
 
     public Cursor getBatteryData() {
-        String selectQuery = "SELECT ima01,imaud04 FROM ima_file ORDER BY imaud04,ima01";
+        String selectQuery = "SELECT ima01,imaud04,ima021 FROM ima_file ORDER BY imaud04,ima01";
         return db.rawQuery(selectQuery, null);
     }
 }
