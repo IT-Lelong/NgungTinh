@@ -1,13 +1,16 @@
 package com.lelong.ngungtinh;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,18 +33,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 //23041001 by Andy modify
 
 
 public class NT_search extends AppCompatActivity {
     EditText /*edt_vaont,*/ edt_dc;
-    EditText edt_mausac,edt_daucuc;  // mausacdaucuc
+    EditText edt_mausac, edt_daucuc;  // mausacdaucuc
     DatePickerDialog datePickerDialog;
     //EditText edt_rant;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -54,17 +62,23 @@ public class NT_search extends AppCompatActivity {
     ArrayAdapter<String> stationlist;
     String g_server;
     private Create_Table createTable = null;
-
+    TextView tv_bdate, tv_edate;
+    DecimalFormat decimalFormat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle getbundle = getIntent().getExtras();
         setContentView(R.layout.activity_nt_search);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        //setContentView(R.layout.demo);
         g_server = getbundle.getString("SERVER");
 
         //edt_vaont = findViewById(R.id.edt_vaont);
         //edt_rant = findViewById(R.id.edt_rant);
-        edt_dc = findViewById(R.id.edt_dc);
+        //edt_dc = findViewById(R.id.edt_dc);
         cbx_qc = findViewById(R.id.cbx_qc);
         cbx_x = findViewById(R.id.cbx_x);
         btn_Search = findViewById(R.id.btn_Search);
@@ -72,6 +86,12 @@ public class NT_search extends AppCompatActivity {
         //mausac,dauccuc
         edt_mausac = findViewById(R.id.edt_mausac);
         edt_daucuc = findViewById(R.id.edt_daucuc);
+        tv_bdate = findViewById(R.id.tv_bdate);
+        tv_edate = findViewById(R.id.tv_edate);
+
+        String pattern = "#,###.##";
+        decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+        decimalFormat.applyPattern(pattern);
         //g_server = "PHP";
         //g_server = "PHPtest";
         createTable = new Create_Table(this);
@@ -101,12 +121,12 @@ public class NT_search extends AppCompatActivity {
                 }*/
                 //mausac,daucuc
                 String g_mausac = edt_mausac.getText().toString().trim();
-                String g_daucuc =  edt_daucuc.getText().toString().trim();
+                String g_daucuc = edt_daucuc.getText().toString().trim();
                 //
                 String g_xuong = "";
                 String g_qc = "";
 
-                String g_dc = edt_dc.getText().toString().trim();
+                //String g_dc = edt_dc.getText().toString().trim();
                 if (cbx_x.getSelectedItem() == null) {
                     g_xuong = "";
                 } else {
@@ -123,12 +143,22 @@ public class NT_search extends AppCompatActivity {
                 } else if (g_vaont.equals("") && !g_rant.equals("")) {
                     g_vaont = g_rant;
                 }*/
-                Cursor cursor = createTable.getAll_search_data(g_dc, g_qc, g_xuong,g_mausac,g_daucuc);
+
+                String l_ngaybd = tv_bdate.getText().toString().trim();
+                String l_ngaykt = tv_edate.getText().toString().trim();
+                /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                LocalDate bdate = LocalDate.parse(tv_bdate.getText().toString().trim(), formatter);
+                LocalDate edate = LocalDate.parse(tv_edate.getText().toString().trim(), formatter);
+
+                String formattl_ngaybd = bdate.format(String.valueOf(formatter));
+                String formattl_ngaykt = edate.format(String.valueOf(formatter));*/
+
+                Cursor cursor = createTable.getAll_search_data("", g_qc, g_xuong, g_mausac, g_daucuc, l_ngaybd, l_ngaykt);
                 SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(NT_search.this,
                         R.layout.activity_nt_search_row, cursor,
-                        new String[]{"_id", "sdata01", "sdata02", "sdata03", "sdata04", "sdata06", "sdata05", "sdata08", "sdata09", "sdata07"},
+                        new String[]{"_id", "sdata01", "sdata02", "sdata03", "sdata06", "sdata05", "sdata08", "sdata09", "sdata07"},
                         //new int[]{R.id.tv_stt, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri},
-                        new int[]{R.id.tv_stt, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri, R.id.tv_dc, R.id.tv_qc, R.id.tv_sl, R.id.tv_mausac,R.id.tv_dauccuc, R.id.tv_date},
+                        new int[]{R.id.tv_stt, R.id.tv_xuong, R.id.tv_khu, R.id.tv_vitri, R.id.tv_qc, R.id.tv_sl, R.id.tv_mausac, R.id.tv_dauccuc, R.id.tv_date},
                         SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
                 simpleCursorAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -150,6 +180,38 @@ public class NT_search extends AppCompatActivity {
             }
 
         });
+
+        View.OnTouchListener touchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int id = v.getId();
+                final int DRAWABLE_RIGHT = 2;
+                switch (id) {
+                    case R.id.tv_bdate:
+                        // xử lý khi nhấn vào TextView tv_bdate_TraHang
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            if (event.getRawX() >= (tv_bdate.getRight() - tv_bdate.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                                showDatePickerDialog(tv_bdate, v);
+                                return true;
+                            }
+                        }
+                        break;
+                    case R.id.tv_edate:
+                        // xử lý khi nhấn vào TextView tv_edate_TraHang
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            if (event.getRawX() >= (tv_edate.getRight() - tv_edate.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                                showDatePickerDialog(tv_edate, v);
+                                return true;
+                            }
+                        }
+                        break;
+                }
+                return false;
+            }
+        };
+        // set sự kiện onTouchListener cho 4 TextView
+        tv_bdate.setOnTouchListener(touchListener);
+        tv_edate.setOnTouchListener(touchListener);
         //btn_Insert.setOnClickListener(new View.OnClickListener() {
         //@Override
         //public void onClick(View view) {
@@ -173,6 +235,50 @@ public class NT_search extends AppCompatActivity {
         //}
         //});
         //load_data();
+    }
+
+    private void showDatePickerDialog(TextView g_textView, View v) {
+        DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//Mỗi lần thay đổi ngày tháng năm thì cập nhật lại TextView Date
+                g_textView.setText(year + "/" + String.format("%02d", monthOfYear) + "/" + String.format("%02d", dayOfMonth));
+
+                if (g_textView.getId() == R.id.tv_bdate && tv_edate.getText().toString().length() == 0) {
+                    tv_edate.setText(tv_bdate.getText().toString().trim());
+                }
+
+                if (g_textView.getId() == R.id.tv_edate) {
+                    // Chuyển đổi chuỗi thành LocalDate
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d");
+                    LocalDate bdate = LocalDate.parse(tv_bdate.getText().toString().trim(), formatter);
+                    LocalDate edate = LocalDate.parse(tv_edate.getText().toString().trim(), formatter);
+
+                    // So sánh hai ngày
+                    if (bdate.compareTo(edate) > 0) {
+                        // bdate lớn hơn edate
+                        Toast.makeText(NT_search.this, "Ngày bắt đẩu không thể lớn hơn ngày kết thúc", Toast.LENGTH_SHORT).show();
+                        tv_edate.setText(tv_bdate.getText().toString().trim());
+                    } else if (bdate.compareTo(edate) < 0) {
+                        // bdate nhỏ hơn edate
+                    } else {
+                        // bdate bằng edate
+                    }
+                }
+            }
+        };
+        // Lấy ngày hiện tại
+        LocalDate currentDate = LocalDate.now();
+
+        int ngay = currentDate.getDayOfMonth();
+        int thang = currentDate.getMonthValue();
+        int nam = currentDate.getYear();
+
+        ;
+        DatePickerDialog pic = new DatePickerDialog(
+                v.getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK,
+                callback, nam, thang, ngay);
+        pic.show();
     }
 
     //Kiểm tra đã có dữ liệu tồn tại trong table total hay chưa
@@ -270,8 +376,6 @@ public class NT_search extends AppCompatActivity {
     }
 
 
-
-
     private void getcode_up() {
         new Thread(new Runnable() {
             @Override
@@ -312,6 +416,7 @@ public class NT_search extends AppCompatActivity {
                                                 check_region(s_quycach);
                                             }
                                         }
+
                                         @Override
                                         public void onNothingSelected(AdapterView<?> parent) {
 

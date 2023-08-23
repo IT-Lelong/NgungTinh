@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 public class Create_Table {
     private Call_interface callInterface;
     private Context mCtx = null;
@@ -558,7 +560,7 @@ public class Create_Table {
 
     }
 
-    public Cursor getAll_search_data(String l_doncong, String l_quycach, String l_xuong, String l_mausac, String l_daucuc) {
+    public Cursor getAll_search_data(String l_doncong, String l_quycach, String l_xuong, String l_mausac, String l_daucuc, String l_datebd,String l_datekt) {
         Cursor a;
         try {
             //SQLiteDatabase db = this.getWritableDatabase();
@@ -581,10 +583,14 @@ public class Create_Table {
             if (!l_daucuc.equals("")) {
                 str = str + " AND sdata09= '" + l_daucuc + "' ";
             }
+            if (!l_datebd.equals("") && !l_datekt.equals("")) {
+                str = str + " AND sdata07 between '" + l_datebd + "' and '" + l_datekt + "' ";
+            }
 
             String selectQuery = "SELECT distinct 0 _id,sdata01,sdata02,sdata03, sdata04,sdata06,sdata05,sdata08,sdata09,sdata07 FROM total_sdata_file  " +
                     " WHERE 1 = 1  ";
-            String sqlorder = "AND sdata05 > 0  ORDER BY 2,3,4,5,8 ";
+            //String sqlorder = "AND sdata05 > 0  ORDER BY 2,3,4,5,8 ";
+            String sqlorder = "AND sdata05 > 0  ORDER BY sdata06,sdata01,sdata07,sdata02,sdata03 ";
             selectQuery = selectQuery + str + sqlorder;
             return db.rawQuery(selectQuery, null);
 

@@ -42,7 +42,8 @@
             android:exported="false" />
         <activity
             android:name=".NT_search"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".OpenScaner"
             android:exported="false"

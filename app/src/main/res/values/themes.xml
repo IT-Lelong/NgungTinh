@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here.-->
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="android:spinnerStyle">@style/SpinnerStyle</item>
+        <!--<item name="android:spinnerStyle">@style/SpinnerStyle</item>-->
 
     </style>
 
